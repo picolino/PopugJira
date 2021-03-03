@@ -4,4 +4,9 @@
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\PopugJira.Application\PopugJira.Application.csproj" />
+      <ProjectReference Include="..\PopugJira.DataAccessLayer\PopugJira.DataAccessLayer.csproj" />
+    </ItemGroup>
+
 </Project>

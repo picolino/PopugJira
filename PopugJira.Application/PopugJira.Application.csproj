@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PopugJira.DataAccessLayer.Contract\PopugJira.DataAccessLayer.Contract.csproj" />
+      <ProjectReference Include="..\PopugJira.Domain\PopugJira.Domain.csproj" />
+    </ItemGroup>
+
+</Project>
