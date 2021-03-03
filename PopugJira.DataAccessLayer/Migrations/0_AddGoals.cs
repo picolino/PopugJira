@@ -9,7 +9,8 @@ namespace PopugJira.DataAccessLayer.Migrations
         {
             Create.Table("goal_states")
                   .WithColumn("id").AsInt32().PrimaryKey().Identity()
-                  .WithColumn("name").AsString().ReferencedBy("goals", "goal_state_id");
+                  .WithColumn("name").AsString().ReferencedBy("goals", "goal_state_id")
+                  .WithColumn("is_system").AsBoolean().NotNullable().WithDefaultValue(false);
 
             Create.Table("goals")
                   .WithColumn("id").AsInt32().PrimaryKey().Identity()
@@ -17,8 +18,8 @@ namespace PopugJira.DataAccessLayer.Migrations
                   .WithColumn("goal_state_id").AsInt32().ForeignKey("goal_states", "id").NotNullable().Indexed();
 
             Insert.IntoTable("goal_states")
-                  .Row(new {name = "Open"})
-                  .Row(new {name = "Closed"});
+                  .Row(new {name = "Open", is_system = true})
+                  .Row(new {name = "Closed", is_system = true});
         }
     }
 }
