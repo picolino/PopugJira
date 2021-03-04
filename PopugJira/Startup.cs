@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentMigrator.Runner;
-using LinqToDB.AspNet;
-using LinqToDB.AspNet.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +9,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PopugJira.DataAccessLayer;
 
 namespace PopugJira
 {
@@ -31,20 +27,6 @@ namespace PopugJira
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-
-            var sqliteConnectionString = Configuration.GetConnectionString("SQLite");
-            
-            services.AddLinqToDbContext<SQLiteDatabaseConnection>((provider, options) =>
-                                                            {
-                                                                options.UseSQLite(sqliteConnectionString)
-                                                                       .UseDefaultLogging(provider);
-                                                            });
-
-            services.AddFluentMigratorCore()
-                    .ConfigureRunner(rb => rb.AddSQLite()
-                                             .WithGlobalConnectionString(sqliteConnectionString)
-                                             .ScanIn(typeof(DataAccessLayer.Migrations.MigrationsScanTarget).Assembly).For.Migrations())
-                    .AddLogging(lb => lb.AddFluentMigratorConsole());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,18 +53,6 @@ namespace PopugJira
                                  endpoints.MapBlazorHub();
                                  endpoints.MapFallbackToPage("/_Host");
                              });
-            
-            ProcessMigrations(app);
-        }
-
-        private static void ProcessMigrations(IApplicationBuilder app)
-        {
-            using var scope = app.ApplicationServices.CreateScope();
-            var migrationsRunner = scope.ServiceProvider.GetService<IMigrationRunner>();
-            if (migrationsRunner!.HasMigrationsToApplyUp())
-            {
-                migrationsRunner.MigrateUp();
-            }
         }
     }
 }
