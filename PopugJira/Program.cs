@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Blazored.Modal;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,6 +24,7 @@ namespace PopugJira
 
         private static void ConfigureServices(WebAssemblyHostBuilder builder, IServiceCollection services)
         {
+            services.AddBlazoredModal();
             services.AddHttpClient("goal_tracker",
                                    c => { c.BaseAddress = new Uri(builder.Configuration["BaseUrls:GoalTracker"]); });
         }

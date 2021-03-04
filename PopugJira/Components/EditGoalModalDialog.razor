@@ -1,0 +1,52 @@
+@using PopugJira.Domain
+
+<form>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" @bind="Goal.Description"></textarea>
+    </div>
+    
+    <button type="submit" class="btn btn-primary" @onclick="@(SaveGoalAndClose)">
+        @if (GoalId is not null)
+        {
+            <label>Save goal</label>
+        }
+        else
+        {
+            <label>Create goal</label>
+        }
+    </button>
+</form>
+
+@inject IHttpClientFactory HttpClientFactory
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+    [Parameter] public int? GoalId { get; set; }
+
+    private HttpClient http;
+    private Goal Goal { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        http = HttpClientFactory.CreateClient("goal_tracker");
+        
+        if (GoalId is not null)
+        {
+            Goal = await http.GetFromJsonAsync<Goal>($"api/v1/goals/{GoalId}");
+        }
+    }
+
+    private async Task SaveGoalAndClose()
+    {
+        if (GoalId is not null)
+        {
+            await http.PutAsJsonAsync($"/api/v1/goals/{GoalId}", Goal);
+        }
+        else
+        {
+            await http.PostAsJsonAsync("/api/v1/goals/new", Goal);
+        }
+
+        await ModalInstance.CloseAsync(ModalResult.Ok(true));
+    }
+}

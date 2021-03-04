@@ -1,43 +1,59 @@
 @page "/goals"
 @using PopugJira.Domain
+@using PopugJira.Components
 
 <h3>Goals here</h3>
-<ul>
-    @foreach (var goal in goals)
-    {
-        <li>
-            <label>#@goal.Id -</label>
-            <label>@goal.Description</label>
-            <button class="btn btn-secondary" @onclick="@(() => RemoveGoal(goal.Id))">X</button>
-        </li>
-    }
-</ul>
 
+<div class="d-sm-block">
+    <ul>
+        @foreach (var goal in goals)
+        {
+            <li>
+                <a href="" @onclick="@(() => OpenEditGoalDialogForEdit(goal.Id))" @onclick:preventDefault>
+                    #@goal.Id - @goal.Description
+                </a>
+                <button class="btn btn-secondary btn-sm" @onclick="@(() => RemoveGoal(goal.Id))">X</button>
+            </li>
+        }
+    </ul>
+    
+    <button class="btn btn-primary" @onclick="@(OpenEditGoalDialogForCreation)">Add new goal</button>
+</div>
 
-<input placeholder="Description" @bind="newGoal.Description" />
-<button class="btn btn-primary" @onclick="AddNewGoal">Add new goal</button>
-
+@inject IModalService Modal
 @inject IHttpClientFactory HttpClientFactory
 @code {
     private HttpClient http;
     private List<Goal> goals = new ();
 
-    private Goal newGoal = new ();
-
     protected override async Task OnInitializedAsync()
     {
-        newGoal = new Goal();
         http = HttpClientFactory.CreateClient("goal_tracker");
         await RefreshGoalsList();
         Console.WriteLine("Initialized");
     }
 
-    private async Task AddNewGoal()
+    private async Task OpenEditGoalDialogForCreation()
     {
-        await http.PostAsJsonAsync("/api/v1/goals/new", newGoal);
-        newGoal = new Goal();
-        await RefreshGoalsList();
-        Console.WriteLine("New goal added");
+        var parameters = new ModalParameters();
+        await HandleEditGoalDialog("Create Goal", parameters);
+    }
+
+    private async Task OpenEditGoalDialogForEdit(int goalId)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(EditGoalModalDialog.GoalId), goalId);
+        await HandleEditGoalDialog("Edit Goal", parameters);
+    }
+
+    private async Task HandleEditGoalDialog(string title, ModalParameters parameters)
+    {
+        var modal = Modal.Show<EditGoalModalDialog>(title, parameters);
+        var result = await modal.Result;
+        if (!result.Cancelled)
+        {
+            await RefreshGoalsList();
+        }
     }
 
     private async Task RemoveGoal(int id)
