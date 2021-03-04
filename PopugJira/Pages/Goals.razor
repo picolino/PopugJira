@@ -1,6 +1,58 @@
 @page "/goals"
-<h3>Goals here</h3>
+@using PopugJira.Domain
 
+<h3>Goals here</h3>
+<ul>
+    @foreach (var goal in goals)
+    {
+        <li>
+            <label>#@goal.Id -</label>
+            <label>@goal.Description</label>
+            <button class="btn btn-secondary" @onclick="@(() => RemoveGoal(goal.Id))">X</button>
+        </li>
+    }
+</ul>
+
+
+<input placeholder="Description" @bind="newGoal.Description" />
+<button class="btn btn-primary" @onclick="AddNewGoal">Add new goal</button>
+
+@inject IHttpClientFactory HttpClientFactory
 @code {
-    
+    private HttpClient http;
+    private List<Goal> goals = new ();
+
+    private Goal newGoal = new ();
+
+    protected override async Task OnInitializedAsync()
+    {
+        newGoal = new Goal();
+        http = HttpClientFactory.CreateClient("goal_tracker");
+        await RefreshGoalsList();
+        Console.WriteLine("Initialized");
+    }
+
+    private async Task AddNewGoal()
+    {
+        await http.PostAsJsonAsync("/api/v1/goals/new", newGoal);
+        newGoal = new Goal();
+        await RefreshGoalsList();
+        Console.WriteLine("New goal added");
+    }
+
+    private async Task RemoveGoal(int id)
+    {
+        await http.DeleteAsync($"/api/v1/goals/{id}");
+        await RefreshGoalsList();
+        Console.WriteLine($"Deleted {id}");
+    }
+
+    private async Task RefreshGoalsList()
+    {
+        var goals = await http.GetFromJsonAsync<Goal[]>("/api/v1/goals");
+        if (goals != null)
+        {
+            this.goals = goals.ToList();
+        }
+    }
 }

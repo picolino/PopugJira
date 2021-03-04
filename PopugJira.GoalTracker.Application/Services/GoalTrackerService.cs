@@ -16,6 +16,11 @@ namespace PopugJira.GoalTracker.Application.Services
             this.goalsDataContext = goalsDataContext;
             this.goalStatesDataContext = goalStatesDataContext;
         }
+
+        public async Task<Goal[]> GetAllGoals()
+        {
+            return await goalsDataContext.GetAll();
+        }
         
         public async Task<Goal> GetGoal(int id)
         {
@@ -32,6 +37,11 @@ namespace PopugJira.GoalTracker.Application.Services
         public async Task UpdateGoal(GoalUpdateDto goalUpdateDto)
         {
             await goalsDataContext.Update(goalUpdateDto.Id, goalUpdateDto.Description);
+        }
+
+        public async Task DeleteGoal(int id)
+        {
+            await goalsDataContext.Delete(id);
         }
 
         public async Task OpenGoal(int id)

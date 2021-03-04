@@ -16,10 +16,16 @@ namespace PopugJira.GoalTracker.Controllers
         {
             this.goalTrackerService = goalTrackerService;
         }
+
+        [HttpGet]
+        public async Task<Goal[]> GetAll()
+        {
+            return await goalTrackerService.GetAllGoals();
+        }
         
         [HttpGet]
         [Route("{id}")]
-        public async Task<Goal> Get([FromQuery] int id)
+        public async Task<Goal> Get([FromRoute] int id)
         {
             return await goalTrackerService.GetGoal(id);
         }
@@ -33,10 +39,17 @@ namespace PopugJira.GoalTracker.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task Update([FromQuery] int id, [FromBody] GoalUpdateDto goalUpdateDto)
+        public async Task Update([FromRoute] int id, [FromBody] GoalUpdateDto goalUpdateDto)
         {
             goalUpdateDto.Id = id;
             await goalTrackerService.UpdateGoal(goalUpdateDto);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task Delete([FromRoute] int id)
+        {
+            await goalTrackerService.DeleteGoal(id);
         }
 
         [HttpPost]

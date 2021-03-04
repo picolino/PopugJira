@@ -16,7 +16,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Entities
         [Column("goal_state_id")]
         public int GoalStateId { get; init; }
         
-        [Association(ThisKey="goal_state_id", OtherKey="id")]
+        [Association(ThisKey=nameof(GoalStateId), OtherKey=nameof(GoalStateEntity.Id))]
         public GoalStateEntity GoalState { get; init; }
 
         public Goal ToDomain()

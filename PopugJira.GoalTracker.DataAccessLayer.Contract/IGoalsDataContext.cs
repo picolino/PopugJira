@@ -11,5 +11,6 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Contract
         Task Delete(int id);
 
         Task SetState(int goalId, int goalStateId);
+        Task<Goal[]> GetAll();
     }
 }

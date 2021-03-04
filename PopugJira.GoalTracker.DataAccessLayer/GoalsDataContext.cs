@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using LinqToDB;
+using LinqToDB.Async;
 using LinqToDB.Configuration;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
 using PopugJira.GoalTracker.DataAccessLayer.Entities;
@@ -22,12 +23,20 @@ namespace PopugJira.GoalTracker.DataAccessLayer
                                                      GoalStateId = goal.State.Id
                                                  });
         }
+
+        public async Task<Goal[]> GetAll()
+        {
+            var entities = await Goals.LoadWith(o => o.GoalState)
+                                      .AsQueryable()
+                                      .ToArrayAsync();
+            return entities.Select(o => o.ToDomain()).ToArray();
+        }
         
         public async Task<Goal> Get(int id)
         {
             var entity = await Goals.LoadWith(o => o.GoalState)
                                     .SingleOrDefaultAsync(o => o.Id == id);
-            return entity.ToDomain();
+            return entity?.ToDomain();
         }
 
         public async Task Update(int id, string description)

@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopugJira", "PopugJira\PopugJira.csproj", "{64052E38-6616-4C14-B843-6996ACAA68C2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopugJira.GoalTracker.Application", "PopugJira.GoalTracker.Application\PopugJira.GoalTracker.Application.csproj", "{FF5C87B2-D761-4ACF-9FE0-A5E8BA6B5ED4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopugJira.GoalTracker.DataAccessLayer", "PopugJira.GoalTracker.DataAccessLayer\PopugJira.GoalTracker.DataAccessLayer.csproj", "{1F9037A2-0E67-4857-9BFE-7B21169CE54D}"
@@ -16,16 +14,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopugJira.GoalTracker", "Po
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PopugJira.GoalTracker", "PopugJira.GoalTracker", "{674C402E-2DB5-47F8-8AB7-AB1AA106D2AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopugJira", "PopugJira\PopugJira.csproj", "{2A2846E9-2900-43CE-895E-138DEC44AA0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{64052E38-6616-4C14-B843-6996ACAA68C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64052E38-6616-4C14-B843-6996ACAA68C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64052E38-6616-4C14-B843-6996ACAA68C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64052E38-6616-4C14-B843-6996ACAA68C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FF5C87B2-D761-4ACF-9FE0-A5E8BA6B5ED4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FF5C87B2-D761-4ACF-9FE0-A5E8BA6B5ED4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF5C87B2-D761-4ACF-9FE0-A5E8BA6B5ED4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -50,6 +46,10 @@ Global
 		{C25ACC8B-057D-4119-BEFC-18DA2E263CEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C25ACC8B-057D-4119-BEFC-18DA2E263CEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C25ACC8B-057D-4119-BEFC-18DA2E263CEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A2846E9-2900-43CE-895E-138DEC44AA0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A2846E9-2900-43CE-895E-138DEC44AA0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A2846E9-2900-43CE-895E-138DEC44AA0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A2846E9-2900-43CE-895E-138DEC44AA0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FF5C87B2-D761-4ACF-9FE0-A5E8BA6B5ED4} = {674C402E-2DB5-47F8-8AB7-AB1AA106D2AA}

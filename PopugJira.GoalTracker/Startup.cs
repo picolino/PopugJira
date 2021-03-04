@@ -59,6 +59,7 @@ namespace PopugJira.GoalTracker
         {
             if (env.IsDevelopment())
             {
+                app.UseCors(b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PopugJira.GoalTracker v1"));
