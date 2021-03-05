@@ -44,12 +44,6 @@ namespace PopugJira.GoalTracker.Application.Services
             await goalsDataContext.Delete(id);
         }
 
-        public async Task OpenGoal(int id)
-        {
-            var openState = await goalStatesDataContext.GetOpenState();
-            await goalsDataContext.SetState(id, openState.Id);
-        }
-
         public async Task CloseGoal(int id)
         {
             var closedState = await goalStatesDataContext.GetClosedState();

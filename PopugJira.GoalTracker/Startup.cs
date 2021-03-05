@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PopugJira.GoalTracker.Application.Commands;
 using PopugJira.GoalTracker.Application.Services;
 using PopugJira.GoalTracker.DataAccessLayer;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
@@ -52,6 +53,8 @@ namespace PopugJira.GoalTracker
             services.AddScoped<IGoalsDataContext, GoalsDataContext>();
             services.AddScoped<IGoalStatesDataContext, GoalStatesDataContext>();
             services.AddScoped<GoalTrackerService>();
+            services.AddScoped<OpenGoalCommand>();
+            services.AddScoped<CloseGoalCommand>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

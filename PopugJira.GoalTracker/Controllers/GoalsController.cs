@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using PopugJira.GoalTracker.Application.Commands;
 using PopugJira.GoalTracker.Application.Dto;
 using PopugJira.GoalTracker.Application.Services;
 using PopugJira.GoalTracker.Domain;
@@ -11,10 +12,16 @@ namespace PopugJira.GoalTracker.Controllers
     public class GoalsController : ControllerBase
     {
         private readonly GoalTrackerService goalTrackerService;
+        private readonly OpenGoalCommand openGoalCommand;
+        private readonly CloseGoalCommand closeGoalCommand;
 
-        public GoalsController(GoalTrackerService goalTrackerService)
+        public GoalsController(GoalTrackerService goalTrackerService,
+                               OpenGoalCommand openGoalCommand,
+                               CloseGoalCommand closeGoalCommand)
         {
             this.goalTrackerService = goalTrackerService;
+            this.openGoalCommand = openGoalCommand;
+            this.closeGoalCommand = closeGoalCommand;
         }
 
         [HttpGet]
@@ -54,16 +61,16 @@ namespace PopugJira.GoalTracker.Controllers
 
         [HttpPost]
         [Route("workflow/{id}/open")]
-        public async Task Open([FromQuery] int id)
+        public async Task Open([FromRoute] int id)
         {
-            await goalTrackerService.OpenGoal(id);
+            await openGoalCommand.Execute(id);
         }
 
         [HttpPost]
         [Route("workflow/{id}/close")]
-        public async Task Close([FromQuery] int id)
+        public async Task Close([FromRoute] int id)
         {
-            await goalTrackerService.CloseGoal(id);
+            await closeGoalCommand.Execute(id);
         }
     }
 }
