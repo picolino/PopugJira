@@ -1,9 +1,8 @@
 namespace PopugJira.GoalTracker.Domain.Definitions
 {
-    public enum SystemGoalState
+    public enum GoalState
     {
-        Custom,
-        Open,
-        Closed
+        Incomplete,
+        Complete
     }
 }

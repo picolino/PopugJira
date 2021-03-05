@@ -2,19 +2,17 @@ using System.Threading.Tasks;
 using PopugJira.GoalTracker.Application.Dto;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
 using PopugJira.GoalTracker.Domain;
+using PopugJira.GoalTracker.Domain.Definitions;
 
 namespace PopugJira.GoalTracker.Application.Services
 {
     public class GoalTrackerService
     {
         private readonly IGoalsDataContext goalsDataContext;
-        private readonly IGoalStatesDataContext goalStatesDataContext;
 
-        public GoalTrackerService(IGoalsDataContext goalsDataContext, 
-                                  IGoalStatesDataContext goalStatesDataContext)
+        public GoalTrackerService(IGoalsDataContext goalsDataContext)
         {
             this.goalsDataContext = goalsDataContext;
-            this.goalStatesDataContext = goalStatesDataContext;
         }
 
         public async Task<Goal[]> GetAllGoals()
@@ -29,8 +27,7 @@ namespace PopugJira.GoalTracker.Application.Services
         
         public async Task CreateGoal(GoalCreateDto createDto)
         {
-            var openState = await goalStatesDataContext.GetOpenState();
-            var goal = new Goal(null, createDto.Description, openState);
+            var goal = new Goal(null, createDto.Description, GoalState.Incomplete);
             await goalsDataContext.Create(goal);
         }
 
@@ -42,12 +39,6 @@ namespace PopugJira.GoalTracker.Application.Services
         public async Task DeleteGoal(int id)
         {
             await goalsDataContext.Delete(id);
-        }
-
-        public async Task CloseGoal(int id)
-        {
-            var closedState = await goalStatesDataContext.GetClosedState();
-            await goalsDataContext.SetState(id, closedState.Id);
         }
     }
 }

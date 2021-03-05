@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using PopugJira.GoalTracker.Domain;
+using PopugJira.GoalTracker.Domain.Definitions;
 
 namespace PopugJira.GoalTracker.DataAccessLayer.Contract
 {
@@ -10,7 +11,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Contract
         Task Update(int id, string description);
         Task Delete(int id);
 
-        Task SetState(int goalId, int goalStateId);
+        Task SetState(int goalId, GoalState goalState);
         Task<Goal[]> GetAll();
     }
 }

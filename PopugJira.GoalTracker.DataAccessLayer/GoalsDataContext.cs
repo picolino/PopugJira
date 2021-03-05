@@ -6,6 +6,7 @@ using LinqToDB.Configuration;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
 using PopugJira.GoalTracker.DataAccessLayer.Entities;
 using PopugJira.GoalTracker.Domain;
+using PopugJira.GoalTracker.Domain.Definitions;
 
 namespace PopugJira.GoalTracker.DataAccessLayer
 {
@@ -20,22 +21,19 @@ namespace PopugJira.GoalTracker.DataAccessLayer
             return await Goals.InsertAsync(() => new GoalEntity
                                                  {
                                                      Description = goal.Description,
-                                                     GoalStateId = goal.State.Id
+                                                     State = goal.State
                                                  });
         }
 
         public async Task<Goal[]> GetAll()
         {
-            var entities = await Goals.LoadWith(o => o.GoalState)
-                                      .AsQueryable()
-                                      .ToArrayAsync();
+            var entities = await Goals.ToArrayAsync();
             return entities.Select(o => o.ToDomain()).ToArray();
         }
         
         public async Task<Goal> Get(int id)
         {
-            var entity = await Goals.LoadWith(o => o.GoalState)
-                                    .SingleOrDefaultAsync(o => o.Id == id);
+            var entity = await Goals.SingleOrDefaultAsync(o => o.Id == id);
             return entity?.ToDomain();
         }
 
@@ -51,10 +49,10 @@ namespace PopugJira.GoalTracker.DataAccessLayer
             await Goals.DeleteAsync(o => o.Id == id);
         }
 
-        public async Task SetState(int goalId, int goalStateId)
+        public async Task SetState(int goalId, GoalState goalState)
         {
             await Goals.Where(o => o.Id == goalId)
-                       .Set(o => o.GoalStateId, goalStateId)
+                       .Set(o => o.State, goalState)
                        .UpdateAsync();
         }
     }

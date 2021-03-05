@@ -1,9 +1,8 @@
 namespace PopugJira.Domain
 {
-    public enum SystemGoalState
+    public enum GoalState
     {
-        Custom,
-        Open,
-        Closed
+        Incomplete,
+        Complete
     }
 }

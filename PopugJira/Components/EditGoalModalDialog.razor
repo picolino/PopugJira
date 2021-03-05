@@ -31,15 +31,15 @@
                 @if (!IsNew)
                 {
                     <label class="form-label">State: </label>
-                    <label>@Goal?.State?.Name</label>
+                    <label>@Goal.State.ToString("G")</label>
                 
-                    @if (@Goal?.State?.SystemState == SystemGoalState.Open)
+                    @if (@Goal.State == GoalState.Incomplete)
                     {
-                        <button class="btn btn-light" @onclick="@(CloseGoal)">Close goal</button>
+                        <button class="btn btn-light" @onclick="@(CompleteGoal)">Complete</button>
                     }
                     else
                     {
-                        <button class="btn btn-light" @onclick="@(OpenGoal)">Open goal</button>
+                        <button class="btn btn-light" @onclick="@(ReopenGoal)">Reopen</button>
                     }
                 }
             </div>
@@ -83,15 +83,15 @@
         await ModalInstance.CloseAsync(ModalResult.Ok(true));
     }
 
-    private async Task OpenGoal()
+    private async Task ReopenGoal()
     {
-        await http.PostAsync($"/api/v1/goals/workflow/{GoalId}/open", new StringContent(string.Empty));
+        await http.PostAsync($"/api/v1/goals/workflow/{GoalId}/reopen", new StringContent(string.Empty));
         await ReloadGoal();
     }
 
-    private async Task CloseGoal()
+    private async Task CompleteGoal()
     {
-        await http.PostAsync($"/api/v1/goals/workflow/{GoalId}/close", new StringContent(string.Empty));
+        await http.PostAsync($"/api/v1/goals/workflow/{GoalId}/complete", new StringContent(string.Empty));
         await ReloadGoal();
     }
 

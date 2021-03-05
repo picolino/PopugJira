@@ -12,6 +12,5 @@ namespace PopugJira.GoalTracker.DataAccessLayer
         }
 
         public ITable<GoalEntity> Goals => GetTable<GoalEntity>();
-        public ITable<GoalStateEntity> GoalStates => GetTable<GoalStateEntity>();
     }
 }

@@ -51,10 +51,9 @@ namespace PopugJira.GoalTracker
                     .AddLogging(lb => lb.AddFluentMigratorConsole());
 
             services.AddScoped<IGoalsDataContext, GoalsDataContext>();
-            services.AddScoped<IGoalStatesDataContext, GoalStatesDataContext>();
             services.AddScoped<GoalTrackerService>();
-            services.AddScoped<OpenGoalCommand>();
-            services.AddScoped<CloseGoalCommand>();
+            services.AddScoped<ReopenGoalCommand>();
+            services.AddScoped<CompleteGoalCommand>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

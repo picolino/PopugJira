@@ -12,16 +12,16 @@ namespace PopugJira.GoalTracker.Controllers
     public class GoalsController : ControllerBase
     {
         private readonly GoalTrackerService goalTrackerService;
-        private readonly OpenGoalCommand openGoalCommand;
-        private readonly CloseGoalCommand closeGoalCommand;
+        private readonly ReopenGoalCommand reopenGoalCommand;
+        private readonly CompleteGoalCommand completeGoalCommand;
 
         public GoalsController(GoalTrackerService goalTrackerService,
-                               OpenGoalCommand openGoalCommand,
-                               CloseGoalCommand closeGoalCommand)
+                               ReopenGoalCommand reopenGoalCommand,
+                               CompleteGoalCommand completeGoalCommand)
         {
             this.goalTrackerService = goalTrackerService;
-            this.openGoalCommand = openGoalCommand;
-            this.closeGoalCommand = closeGoalCommand;
+            this.reopenGoalCommand = reopenGoalCommand;
+            this.completeGoalCommand = completeGoalCommand;
         }
 
         [HttpGet]
@@ -60,17 +60,17 @@ namespace PopugJira.GoalTracker.Controllers
         }
 
         [HttpPost]
-        [Route("workflow/{id}/open")]
-        public async Task Open([FromRoute] int id)
+        [Route("workflow/{id}/reopen")]
+        public async Task Reopen([FromRoute] int id)
         {
-            await openGoalCommand.Execute(id);
+            await reopenGoalCommand.Execute(id);
         }
 
         [HttpPost]
-        [Route("workflow/{id}/close")]
-        public async Task Close([FromRoute] int id)
+        [Route("workflow/{id}/complete")]
+        public async Task Complete([FromRoute] int id)
         {
-            await closeGoalCommand.Execute(id);
+            await completeGoalCommand.Execute(id);
         }
     }
 }

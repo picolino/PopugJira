@@ -1,5 +1,6 @@
 using LinqToDB.Mapping;
 using PopugJira.GoalTracker.Domain;
+using PopugJira.GoalTracker.Domain.Definitions;
 
 namespace PopugJira.GoalTracker.DataAccessLayer.Entities
 {
@@ -13,15 +14,12 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Entities
         [Column("description")]
         public string Description { get; init; }
         
-        [Column("goal_state_id")]
-        public int GoalStateId { get; init; }
-        
-        [Association(ThisKey=nameof(GoalStateId), OtherKey=nameof(GoalStateEntity.Id))]
-        public GoalStateEntity GoalState { get; init; }
+        [Column("state")]
+        public GoalState State { get; init; }
 
         public Goal ToDomain()
         {
-            return new (Id, Description, GoalState.ToDomain());
+            return new (Id, Description, State);
         }
     }
 }

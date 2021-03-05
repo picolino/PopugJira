@@ -1,4 +1,6 @@
-﻿namespace PopugJira.GoalTracker.Domain
+﻿using PopugJira.GoalTracker.Domain.Definitions;
+
+namespace PopugJira.GoalTracker.Domain
 {
     public class Goal
     {
