@@ -1,0 +1,102 @@
+@using PopugJira.Domain
+
+<div class="container">
+    <div class="row">
+        @if (Goal is null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <div class="col-8">
+                <EditForm Model="@Goal">
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <InputTextArea class="form-control" @bind-Value="Goal.Description"></InputTextArea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" @onclick="@(SaveGoalAndClose)">
+                        @if (!IsNew)
+                        {
+                            <label>Save goal</label>
+                        }
+                        else
+                        {
+                            <label>Create goal</label>
+                        }
+                    </button>
+                </EditForm>
+            </div>
+            <div class="col-4">
+                @if (!IsNew)
+                {
+                    <label class="form-label">State: </label>
+                    <label>@Goal.State.ToString("G")</label>
+                
+                    @if (@Goal.State == GoalState.Incomplete)
+                    {
+                        <button class="btn btn-light" @onclick="@(CompleteGoal)">Complete</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-light" @onclick="@(ReopenGoal)">Reopen</button>
+                    }
+                }
+            </div>
+        }
+    </div>
+</div>
+
+
+
+@inject IHttpClientFactory HttpClientFactory
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+    [Parameter] public int? GoalId { get; set; }
+
+    private HttpClient http;
+    private Goal Goal { get; set; } = new();
+
+    private bool IsNew => GoalId is null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        http = HttpClientFactory.CreateClient("goal_tracker");
+        
+        if (GoalId is not null)
+        {
+            await ReloadGoal();
+        }
+    }
+
+    private async Task SaveGoalAndClose()
+    {
+        if (GoalId is not null)
+        {
+            await http.PutAsJsonAsync($"/api/v1/goals/{GoalId}", Goal);
+        }
+        else
+        {
+            await http.PostAsJsonAsync("/api/v1/goals/new", Goal);
+        }
+
+        await ModalInstance.CloseAsync(ModalResult.Ok(true));
+    }
+
+    private async Task ReopenGoal()
+    {
+        await http.PostAsync($"/api/v1/goals/workflow/{GoalId}/reopen", new StringContent(string.Empty));
+        await ReloadGoal();
+    }
+
+    private async Task CompleteGoal()
+    {
+        await http.PostAsync($"/api/v1/goals/workflow/{GoalId}/complete", new StringContent(string.Empty));
+        await ReloadGoal();
+    }
+
+    private async Task ReloadGoal()
+    {
+        Goal = await http.GetFromJsonAsync<Goal>($"api/v1/goals/{GoalId}");
+    }
+}
