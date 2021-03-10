@@ -9,10 +9,8 @@ using Serviced;
 
 namespace PopugJira.GoalTracker.DataAccessLayer
 {
-    public class AssigneesGetDbOperations : SQLiteDatabaseConnection, IAssigneesGetDbOperations, IScoped<IAssigneesGetDbOperations>
+    public class AssigneesGetDbOperations : AssigneeDbOperations, IAssigneesGetDbOperations, IScoped<IAssigneesGetDbOperations>
     {
-        private ITable<AssigneeEntity> Assignees => GetTable<AssigneeEntity>();
-        
         public AssigneesGetDbOperations(LinqToDbConnectionOptions<SQLiteDatabaseConnection> options) : base(options)
         {
         }
