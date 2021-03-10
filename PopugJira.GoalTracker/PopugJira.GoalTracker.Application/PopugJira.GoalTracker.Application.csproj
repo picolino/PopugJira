@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\PopugJira.Shared\PopugJira.AutoDI\PopugJira.AutoDI.csproj" />
       <ProjectReference Include="..\PopugJira.GoalTracker.DataAccessLayer.Contract\PopugJira.GoalTracker.DataAccessLayer.Contract.csproj" />
       <ProjectReference Include="..\PopugJira.GoalTracker.Domain\PopugJira.GoalTracker.Domain.csproj" />
     </ItemGroup>

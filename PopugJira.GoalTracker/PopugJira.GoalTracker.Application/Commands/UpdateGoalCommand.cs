@@ -1,22 +1,22 @@
 using System.Threading.Tasks;
 using PopugJira.AutoDI;
+using PopugJira.GoalTracker.Application.Dto;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
-using PopugJira.GoalTracker.Domain.Definitions;
 
 namespace PopugJira.GoalTracker.Application.Commands
 {
-    public class CompleteGoalCommand : ICommand
+    public class UpdateGoalCommand : ICommand
     {
         private readonly IGoalsDataContext goalsDataContext;
 
-        public CompleteGoalCommand(IGoalsDataContext goalsDataContext)
+        public UpdateGoalCommand(IGoalsDataContext goalsDataContext)
         {
             this.goalsDataContext = goalsDataContext;
         }
-        
-        public async Task Execute(int id)
+
+        public async Task Execute(GoalUpdateDto goalUpdateDto)
         {
-            await goalsDataContext.SetState(id, GoalState.Complete);
+            await goalsDataContext.Update(goalUpdateDto.Id, goalUpdateDto.Description);
         }
     }
 }

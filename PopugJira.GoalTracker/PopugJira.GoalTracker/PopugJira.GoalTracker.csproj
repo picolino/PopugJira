@@ -9,6 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\PopugJira.Shared\PopugJira.AutoDI\PopugJira.AutoDI.csproj" />
       <ProjectReference Include="..\PopugJira.GoalTracker.Application\PopugJira.GoalTracker.Application.csproj" />
       <ProjectReference Include="..\PopugJira.GoalTracker.DataAccessLayer\PopugJira.GoalTracker.DataAccessLayer.csproj" />
     </ItemGroup>

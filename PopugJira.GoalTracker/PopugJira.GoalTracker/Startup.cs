@@ -14,10 +14,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PopugJira.GoalTracker.Application;
 using PopugJira.GoalTracker.Application.Commands;
-using PopugJira.GoalTracker.Application.Services;
 using PopugJira.GoalTracker.DataAccessLayer;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
+using Serviced;
 
 namespace PopugJira.GoalTracker
 {
@@ -37,7 +38,7 @@ namespace PopugJira.GoalTracker
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "PopugJira.GoalTracker", Version = "v1"}); });
 
             var sqliteConnectionString = Configuration.GetConnectionString("SQLite");
-            
+
             services.AddLinqToDbContext<SQLiteDatabaseConnection>((provider, options) =>
                                                                   {
                                                                       options.UseSQLite(sqliteConnectionString)
@@ -50,10 +51,12 @@ namespace PopugJira.GoalTracker
                                              .ScanIn(typeof(DataAccessLayer.Migrations.MigrationsScanTarget).Assembly).For.Migrations())
                     .AddLogging(lb => lb.AddFluentMigratorConsole());
 
-            services.AddScoped<IGoalsDataContext, GoalsDataContext>();
-            services.AddScoped<GoalTrackerService>();
-            services.AddScoped<ReopenGoalCommand>();
-            services.AddScoped<CompleteGoalCommand>();
+            var assemblies = new[]
+                             {
+                                 typeof(DataAccessLayer.AutoDiTarget).Assembly,
+                                 typeof(Application.AutoDiTarget).Assembly
+                             };
+            services.AddServiced(assemblies);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
+using PopugJira.AutoDI;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
 using PopugJira.GoalTracker.Domain.Definitions;
 
 namespace PopugJira.GoalTracker.Application.Commands
 {
-    public class ReopenGoalCommand
+    public class ReopenGoalCommand : ICommand
     {
         private readonly IGoalsDataContext goalsDataContext;
 
