@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using PopugJira.AutoDI;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
@@ -14,7 +15,7 @@ namespace PopugJira.GoalTracker.Application.Commands
             this.goalsDataContext = goalsDataContext;
         }
         
-        public async Task Execute(int id)
+        public async Task Execute(Guid id)
         {
             await goalsDataContext.SetState(id, GoalState.Complete);
         }

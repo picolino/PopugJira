@@ -10,7 +10,7 @@
         {
             <li>
                 <a href="" @onclick="@(() => OpenEditGoalDialogForEdit(goal.Id))" @onclick:preventDefault>
-                    #@goal.Id - @goal.Description
+                    #@goal.Id - @goal.Title
                 </a>
                 <button class="btn btn-secondary btn-sm" @onclick="@(() => RemoveGoal(goal.Id))">X</button>
             </li>
@@ -39,7 +39,7 @@
         await HandleEditGoalDialog("Create Goal", parameters);
     }
 
-    private async Task OpenEditGoalDialogForEdit(int goalId)
+    private async Task OpenEditGoalDialogForEdit(Guid goalId)
     {
         var parameters = new ModalParameters();
         parameters.Add(nameof(EditGoalModalDialog.GoalId), goalId);
@@ -56,7 +56,7 @@
         }
     }
 
-    private async Task RemoveGoal(int id)
+    private async Task RemoveGoal(Guid id)
     {
         await http.DeleteAsync($"/api/v1/goals/{id}");
         await RefreshGoalsList();

@@ -1,3 +1,4 @@
+using System;
 using LinqToDB.Mapping;
 using PopugJira.GoalTracker.Domain;
 using PopugJira.GoalTracker.Domain.Definitions;
@@ -9,7 +10,10 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Entities
     {
         [PrimaryKey]
         [Column("id")]
-        public int Id { get; init; }
+        public Guid Id { get; init; }
+        
+        [Column("title")]
+        public string Title { get; init; }
         
         [Column("description")]
         public string Description { get; init; }
@@ -19,7 +23,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Entities
 
         public Goal ToDomain()
         {
-            return new (Id, Description, State);
+            return new (Id, Title, Description, State);
         }
     }
 }

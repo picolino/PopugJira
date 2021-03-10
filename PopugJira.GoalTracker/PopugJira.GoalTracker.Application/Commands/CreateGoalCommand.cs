@@ -18,7 +18,7 @@ namespace PopugJira.GoalTracker.Application.Commands
 
         public async Task Execute(GoalCreateDto goalCreateDto)
         {
-            var goal = new Goal(null, goalCreateDto.Description, GoalState.Incomplete);
+            var goal = new Goal(null, goalCreateDto.Title, goalCreateDto.Description, GoalState.Incomplete);
             await goalsDataContext.Create(goal);
         }
     }

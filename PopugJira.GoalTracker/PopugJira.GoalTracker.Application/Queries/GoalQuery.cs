@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using PopugJira.AutoDI;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
@@ -14,7 +15,7 @@ namespace PopugJira.GoalTracker.Application.Queries
             this.goalsDataContext = goalsDataContext;
         }
         
-        public async Task<Goal> Query(int id)
+        public async Task<Goal> Query(Guid id)
         {
             return await goalsDataContext.Get(id);
         }

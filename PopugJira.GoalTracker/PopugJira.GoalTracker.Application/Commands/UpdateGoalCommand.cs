@@ -16,7 +16,7 @@ namespace PopugJira.GoalTracker.Application.Commands
 
         public async Task Execute(GoalUpdateDto goalUpdateDto)
         {
-            await goalsDataContext.Update(goalUpdateDto.Id, goalUpdateDto.Description);
+            await goalsDataContext.Update(goalUpdateDto.Id, goalUpdateDto.Title, goalUpdateDto.Description);
         }
     }
 }

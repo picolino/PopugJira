@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PopugJira.GoalTracker.Application.Commands;
@@ -44,7 +45,7 @@ namespace PopugJira.GoalTracker.Controllers
         
         [HttpGet]
         [Route("{id}")]
-        public async Task<Goal> Get([FromRoute] int id)
+        public async Task<Goal> Get([FromRoute] Guid id)
         {
             return await goalQuery.Query(id);
         }
@@ -58,7 +59,7 @@ namespace PopugJira.GoalTracker.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task Update([FromRoute] int id, [FromBody] GoalUpdateDto goalUpdateDto)
+        public async Task Update([FromRoute] Guid id, [FromBody] GoalUpdateDto goalUpdateDto)
         {
             goalUpdateDto.Id = id;
             await updateGoalCommand.Execute(goalUpdateDto);
@@ -66,21 +67,21 @@ namespace PopugJira.GoalTracker.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task Delete([FromRoute] int id)
+        public async Task Delete([FromRoute] Guid id)
         {
             await deleteGoalCommand.Execute(id);
         }
 
         [HttpPost]
         [Route("workflow/{id}/reopen")]
-        public async Task Reopen([FromRoute] int id)
+        public async Task Reopen([FromRoute] Guid id)
         {
             await reopenGoalCommand.Execute(id);
         }
 
         [HttpPost]
         [Route("workflow/{id}/complete")]
-        public async Task Complete([FromRoute] int id)
+        public async Task Complete([FromRoute] Guid id)
         {
             await completeGoalCommand.Execute(id);
         }

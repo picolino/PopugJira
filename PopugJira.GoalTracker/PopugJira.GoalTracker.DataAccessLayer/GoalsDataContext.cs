@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -16,13 +17,15 @@ namespace PopugJira.GoalTracker.DataAccessLayer
         {
         }
 
-        public async Task<int> Create(Goal goal)
+        public async Task Create(Goal goal)
         {
-            return await Goals.InsertAsync(() => new GoalEntity
-                                                 {
-                                                     Description = goal.Description,
-                                                     State = goal.State
-                                                 });
+            await Goals.InsertAsync(() => new GoalEntity
+                                          {
+                                              Id = goal.Id ?? Guid.NewGuid(),
+                                              Title = goal.Title,
+                                              Description = goal.Description,
+                                              State = goal.State
+                                          });
         }
 
         public async Task<Goal[]> GetAll()
@@ -31,25 +34,26 @@ namespace PopugJira.GoalTracker.DataAccessLayer
             return entities.Select(o => o.ToDomain()).ToArray();
         }
         
-        public async Task<Goal> Get(int id)
+        public async Task<Goal> Get(Guid id)
         {
             var entity = await Goals.SingleOrDefaultAsync(o => o.Id == id);
             return entity?.ToDomain();
         }
 
-        public async Task Update(int id, string description)
+        public async Task Update(Guid id, string title, string description)
         {
             await Goals.Where(o => o.Id == id)
+                       .Set(o => o.Title, title)
                        .Set(o => o.Description, description)
                        .UpdateAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             await Goals.DeleteAsync(o => o.Id == id);
         }
 
-        public async Task SetState(int goalId, GoalState goalState)
+        public async Task SetState(Guid goalId, GoalState goalState)
         {
             await Goals.Where(o => o.Id == goalId)
                        .Set(o => o.State, goalState)
