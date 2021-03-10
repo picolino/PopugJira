@@ -10,7 +10,14 @@
         {
             <li>
                 <a href="" @onclick="@(() => OpenEditGoalDialogForEdit(goal.Id))" @onclick:preventDefault>
-                    #@goal.Id - @goal.Title
+                    @if (goal.HasAssignee)
+                    {
+                        @:#@goal.Id - @goal.Title - @goal.Assignee.UserName
+                    }
+                    else
+                    {
+                        @:#@goal.Id - @goal.Title
+                    }
                 </a>
                 <button class="btn btn-secondary btn-sm" @onclick="@(() => RemoveGoal(goal.Id))">X</button>
             </li>
