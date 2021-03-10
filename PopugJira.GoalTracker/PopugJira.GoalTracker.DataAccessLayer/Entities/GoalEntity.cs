@@ -20,10 +20,16 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Entities
         
         [Column("state")]
         public GoalState State { get; init; }
+        
+        [Column("assignee_id")]
+        public Guid? AssigneeId { get; init; }
+        
+        [Association(ThisKey = nameof(AssigneeId), OtherKey = nameof(AssigneeEntity.Id))]
+        public AssigneeEntity Assignee { get; init; }
 
         public Goal ToDomain()
         {
-            return new (Id, Title, Description, State);
+            return new (Id, Title, Description, State, Assignee?.ToDomain());
         }
     }
 }

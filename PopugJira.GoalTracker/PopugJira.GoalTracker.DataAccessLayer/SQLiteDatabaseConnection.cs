@@ -10,7 +10,5 @@ namespace PopugJira.GoalTracker.DataAccessLayer
         public SQLiteDatabaseConnection(LinqToDbConnectionOptions<SQLiteDatabaseConnection> options) : base(options)
         {
         }
-
-        public ITable<GoalEntity> Goals => GetTable<GoalEntity>();
     }
 }

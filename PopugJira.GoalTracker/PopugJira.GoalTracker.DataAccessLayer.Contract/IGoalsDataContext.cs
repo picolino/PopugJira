@@ -12,7 +12,9 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Contract
         Task Update(Guid id, string title, string description);
         Task Delete(Guid id);
 
-        Task SetState(Guid goalId, GoalState goalState);
+        Task SetState(GoalState goalState, params Guid[] goalIds);
+        Task SetAssignee(Guid goalId, Guid assigneeId);
         Task<Goal[]> GetAll();
+        Task<Guid[]> GetIdsByState(GoalState state);
     }
 }
