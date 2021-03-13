@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Security.Claims;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 
@@ -32,7 +32,8 @@ namespace PopugJira.Identity
                    {
                        new ApiResource("goal-tracker", "Goal Tracker API")
                        {
-                           Scopes = { "goal-tracker" }
+                           Scopes = { "goal-tracker" },
+                           UserClaims = { ClaimTypes.Role }
                        }
                    };
         }
@@ -45,6 +46,7 @@ namespace PopugJira.Identity
                        {
                            ClientId = "popugjira_client",
                            AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                           AlwaysIncludeUserClaimsInIdToken = true,
                            AllowedScopes = {"goal-tracker"},
                            ClientSecrets =
                            {
@@ -61,14 +63,32 @@ namespace PopugJira.Identity
                        new TestUser
                        {
                            SubjectId = "1",
-                           Username = "foo1",
-                           Password = "bar1"
+                           Username = "admin",
+                           Password = "foobar",
+                           Claims = new List<Claim>
+                                    {
+                                        new Claim(ClaimTypes.Role, "admin")
+                                    }
                        },
                        new TestUser
                        {
                            SubjectId = "2",
-                           Username = "foo2",
-                           Password = "bar2"
+                           Username = "manager",
+                           Password = "foobar",
+                           Claims = new List<Claim>
+                                    {
+                                        new Claim(ClaimTypes.Role, "manager")
+                                    },
+                       },
+                       new TestUser
+                       {
+                           SubjectId = "3",
+                           Username = "programmer",
+                           Password = "foobar",
+                           Claims = new List<Claim>
+                                    {
+                                        new Claim(ClaimTypes.Role, "programmer")
+                                    },
                        }
                    };
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentMigrator.Runner;
 using LinqToDB.AspNet;
@@ -43,6 +44,7 @@ namespace PopugJira.GoalTracker
                                                      {
                                                          options.Authority = "https://localhost:5005";
                                                          options.RequireHttpsMetadata = false;
+                                                         options.RoleClaimType = ClaimTypes.Role;
                                                      });
 
             var sqliteConnectionString = Configuration.GetConnectionString("SQLite");

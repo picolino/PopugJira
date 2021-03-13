@@ -6,7 +6,7 @@ using PopugJira.GoalTracker.Application.Dto;
 
 namespace PopugJira.GoalTracker.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin, manager")]
     [ApiController]
     [Route("api/v1/assignees")]
     public class AssigneesController : ControllerBase
