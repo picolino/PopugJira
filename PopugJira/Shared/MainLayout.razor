@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using PopugJira.Services
+@inherits LayoutComponentBase
 
 <div class="page">
     <div class="sidebar">
@@ -6,8 +7,34 @@
     </div>
 
     <div class="main">
+        <div class="top-row px-4 auth">
+            @if (currentUserIdentity.User is null)
+            {
+                <NavLink href="login">
+                    <span class="oi oi-account-login" aria-hidden="true"></span> Log in
+                </NavLink>
+            }
+            else
+            {
+                <NavLink href="" @onclick="@(LogOut)">
+                    <span class="oi oi-account-logout" aria-hidden="true"></span> Log out
+                </NavLink>
+                
+            }
+        </div>
+        
         <div class="content px-4">
             @Body
         </div>
     </div>
 </div>
+
+@inject CurrentUserIdentity currentUserIdentity
+
+@code
+{
+    private void LogOut()
+    {
+        currentUserIdentity.Clear();
+    }
+}

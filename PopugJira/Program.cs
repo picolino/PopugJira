@@ -29,7 +29,8 @@ namespace PopugJira
         private static async Task ConfigureServices(WebAssemblyHostBuilder builder, IServiceCollection services)
         {
             services.AddBlazoredModal();
-            
+
+            services.TryAddSingleton<CurrentUserIdentity>();
             services.TryAddTransient<AuthorizationFailedHandler>();
 
             var httpClientBuilder = services.AddHttpClient("goal_tracker",

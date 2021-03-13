@@ -14,7 +14,12 @@ namespace PopugJira.Identity
                        new IdentityResources.OpenId(),
                        new IdentityResources.Profile(),
                        new IdentityResources.Email(),
-                       new IdentityResources.Phone()
+                       new IdentityResources.Phone(),
+                       new IdentityResource
+                       {
+                           Name = "roles",
+                           UserClaims = { ClaimTypes.Role }
+                       }
                    };
         }
 
@@ -44,10 +49,10 @@ namespace PopugJira.Identity
                    {
                        new Client
                        {
-                           ClientId = "popugjira_client",
+                           ClientId = "blazor-client",
                            AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                            AlwaysIncludeUserClaimsInIdToken = true,
-                           AllowedScopes = {"goal-tracker"},
+                           AllowedScopes = { "openid", "goal-tracker", "roles" },
                            ClientSecrets =
                            {
                                new Secret("SECRET".Sha512())

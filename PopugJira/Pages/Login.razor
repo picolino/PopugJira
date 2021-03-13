@@ -23,21 +23,39 @@
 
 @inject IHttpClientFactory httpClientFactory
 @inject NavigationManager navigationManager
+@inject CurrentUserIdentity currentUserIdentity
+
 @code {
     private LoginModel loginModel = new LoginModel();
+    private HttpClient http;
+
+    protected override void OnInitialized()
+    {
+        http = httpClientFactory.CreateClient();
+    }
 
     private async Task LogIn()
     {
-        var client = new TokenClient(new HttpClient(),
+        var client = new TokenClient(http,
                                      new TokenClientOptions
                                      {
                                          Address = "https://localhost:5005/connect/token",
-                                         ClientId = "popugjira_client",
+                                         ClientId = "blazor-client",
                                          ClientSecret = "SECRET"
                                      });
             
         var token = await client.RequestPasswordTokenAsync(loginModel.Login, loginModel.Password);
+        
         TokensContainer.GoalTrackerToken = token.AccessToken;
+
+        var ui = await http.GetUserInfoAsync(new UserInfoRequest
+                                             {
+                                                 Address = "https://localhost:5005/connect/userinfo",
+                                                 Token = token.AccessToken
+                                             });
+        
+        currentUserIdentity.SetUserByClaims(ui.Claims);
+        
         navigationManager.NavigateTo("/");
     }
 

@@ -1,35 +1,53 @@
 @page "/goals"
 @using PopugJira.Domain
 @using PopugJira.Components
+@using PopugJira.Services
 
 <h3>Goals here</h3>
 
-<div class="d-sm-block">
-    <ul>
-        @foreach (var goal in goals)
+@if (currentUserIdentity.User is null)
+{
+    <p>Please authorize to view this page</p>
+}
+else
+{
+    <div class="d-sm-block">
+        <ul>
+            @foreach (var goal in goals)
+            {
+                <li>
+                    <a href="" @onclick="@(() => OpenEditGoalDialogForEdit(goal.Id))" @onclick:preventDefault>
+                        @if (goal.HasAssignee)
+                        {
+                            @:#@goal.Id - @goal.Title - @goal.Assignee.UserName
+                        }
+                        else
+                        {
+                            @:#@goal.Id - @goal.Title
+                        }
+                    </a>
+                    <button class="btn btn-secondary btn-sm" @onclick="@(() => RemoveGoal(goal.Id))">X</button>
+                </li>
+            }
+        </ul>
+
+        @if (currentUserIdentity.User.Role == Role.Admin
+             || currentUserIdentity.User.Role == Role.Manager)
         {
-            <li>
-                <a href="" @onclick="@(() => OpenEditGoalDialogForEdit(goal.Id))" @onclick:preventDefault>
-                    @if (goal.HasAssignee)
-                    {
-                        @:#@goal.Id - @goal.Title - @goal.Assignee.UserName
-                    }
-                    else
-                    {
-                        @:#@goal.Id - @goal.Title
-                    }
-                </a>
-                <button class="btn btn-secondary btn-sm" @onclick="@(() => RemoveGoal(goal.Id))">X</button>
-            </li>
+            <button class="btn btn-primary" @onclick="@(OpenEditGoalDialogForCreation)">Add new goal</button>
+            <button class="btn btn-primary" @onclick="@(ReassignGoals)">Reassign</button>
         }
-    </ul>
-    
-    <button class="btn btn-primary" @onclick="@(OpenEditGoalDialogForCreation)">Add new goal</button>
-    <button class="btn btn-primary" @onclick="@(ReassignGoals)">Reassign</button>
-</div>
+        else
+        {
+            <button class="btn btn-primary" @onclick="@(OpenEditGoalDialogForCreation)">Add new goal</button>
+        }
+    </div>
+}
 
 @inject IModalService Modal
 @inject IHttpClientFactory HttpClientFactory
+@inject CurrentUserIdentity currentUserIdentity
+
 @code {
     private HttpClient http;
     private List<Goal> goals = new ();
