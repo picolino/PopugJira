@@ -37,6 +37,14 @@ namespace PopugJira.GoalTracker
             services.AddControllers();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "PopugJira.GoalTracker", Version = "v1"}); });
 
+            services.AddAuthentication("IdentityBearer")
+                    .AddIdentityServerAuthentication("IdentityBearer",
+                                                     options =>
+                                                     {
+                                                         options.Authority = "https://localhost:5005";
+                                                         options.RequireHttpsMetadata = false;
+                                                     });
+
             var sqliteConnectionString = Configuration.GetConnectionString("SQLite");
 
             services.AddLinqToDbContext<SQLiteDatabaseConnection>((provider, options) =>
@@ -74,6 +82,7 @@ namespace PopugJira.GoalTracker
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
