@@ -1,12 +1,14 @@
 #region Usings
 
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Blazored.Modal;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Http;
+using PopugJira.Services;
 
 #endregion
 
@@ -27,23 +29,25 @@ namespace PopugJira
         private static async Task ConfigureServices(WebAssemblyHostBuilder builder, IServiceCollection services)
         {
             services.AddBlazoredModal();
+            
+            services.TryAddTransient<AuthorizationFailedHandler>();
 
-            var client = new TokenClient(new HttpClient(),
-                                         new TokenClientOptions
-                                         {
-                                             Address = "https://localhost:5005/connect/token",
-                                             ClientId = "client",
-                                             ClientSecret = "SECRET"
-                                         });
-            
-            var token = await client.RequestClientCredentialsTokenAsync();
-            
-            services.AddHttpClient("goal_tracker",
-                                   c =>
-                                   {
-                                       c.BaseAddress = new Uri(builder.Configuration["BaseUrls:GoalTracker"]);
-                                       c.SetBearerToken(token.AccessToken);
-                                   });
+            var httpClientBuilder = services.AddHttpClient("goal_tracker",
+                                                           client =>
+                                                           {
+                                                               client.BaseAddress = new Uri(builder.Configuration["BaseUrls:GoalTracker"]);
+                                                           })
+                                            .AddHttpMessageHandler<AuthorizationFailedHandler>();
+
+            services.Configure<HttpClientFactoryOptions>(httpClientBuilder.Name,
+                                                         options =>
+                                                         {
+                                                             options.SuppressHandlerScope = true;
+                                                             options.HttpClientActions.Add(client =>
+                                                                                           {
+                                                                                               client.SetBearerToken(TokensContainer.GoalTrackerToken);
+                                                                                           });
+                                                         });
         }
     }
 }

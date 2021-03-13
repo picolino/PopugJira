@@ -22,7 +22,7 @@ namespace PopugJira.Identity
         {
             return new List<ApiScope>
                    {
-                       new ApiScope("default-api-scope")
+                       new ApiScope("goal-tracker")
                    };
         }
 
@@ -30,9 +30,9 @@ namespace PopugJira.Identity
         {
             return new List<ApiResource>
                    {
-                       new ApiResource("default-api-resource", "Default (all) API")
+                       new ApiResource("goal-tracker", "Goal Tracker API")
                        {
-                           Scopes = { "default-api-scope" }
+                           Scopes = { "goal-tracker" }
                        }
                    };
         }
@@ -43,9 +43,9 @@ namespace PopugJira.Identity
                    {
                        new Client
                        {
-                           ClientId = "client",
-                           AllowedGrantTypes = GrantTypes.ClientCredentials.Union(GrantTypes.ResourceOwnerPassword).ToList(),
-                           AllowedScopes = {"default-api-scope"},
+                           ClientId = "popugjira_client",
+                           AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                           AllowedScopes = {"goal-tracker"},
                            ClientSecrets =
                            {
                                new Secret("SECRET".Sha512())
@@ -60,9 +60,15 @@ namespace PopugJira.Identity
                    {
                        new TestUser
                        {
-                           Username = "foo",
-                           Password = "bar",
-                           IsActive = true
+                           SubjectId = "1",
+                           Username = "foo1",
+                           Password = "bar1"
+                       },
+                       new TestUser
+                       {
+                           SubjectId = "2",
+                           Username = "foo2",
+                           Password = "bar2"
                        }
                    };
         }

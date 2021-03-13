@@ -1,0 +1,49 @@
+﻿@page "/login"
+@using IdentityModel.Client
+@using PopugJira.Services
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <EditForm Model="loginModel">
+                <div class="mb-3">
+                    <label class="form-label">Login</label>
+                    <InputText class="form-control" @bind-Value="@loginModel.Login"/>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <InputText class="form-control" @bind-Value="@loginModel.Password"></InputText>
+                </div>
+        
+                <button type="submit" class="btn btn-primary" @onclick="@(LogIn)">Login</button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@inject IHttpClientFactory httpClientFactory
+@inject NavigationManager navigationManager
+@code {
+    private LoginModel loginModel = new LoginModel();
+
+    private async Task LogIn()
+    {
+        var client = new TokenClient(new HttpClient(),
+                                     new TokenClientOptions
+                                     {
+                                         Address = "https://localhost:5005/connect/token",
+                                         ClientId = "popugjira_client",
+                                         ClientSecret = "SECRET"
+                                     });
+            
+        var token = await client.RequestPasswordTokenAsync(loginModel.Login, loginModel.Password);
+        TokensContainer.GoalTrackerToken = token.AccessToken;
+        navigationManager.NavigateTo("/");
+    }
+
+    private class LoginModel
+    {
+        public string Login { get; set; }
+        public string Password { get; set; }
+    }
+}
