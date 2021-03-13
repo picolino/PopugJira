@@ -12,9 +12,11 @@ namespace PopugJira.Services
         
         public void SetUserByClaims(IEnumerable<Claim> claims)
         {
+            var claimsArray = claims.ToArray();
             User = new User
                    {
-                       Role = claims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value switch
+                       Name = claimsArray.FirstOrDefault(o => o.Type == ClaimTypes.Name)?.Value,
+                       Role = claimsArray.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value switch
                        {
                            "admin" => Role.Admin,
                            "bookkeeper" => Role.Bookkeeper,
@@ -34,6 +36,7 @@ namespace PopugJira.Services
 
     public class User
     {
+        public string Name { get; init; }
         public Role Role { get; init; }
     }
 

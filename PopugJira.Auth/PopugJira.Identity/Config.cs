@@ -17,8 +17,8 @@ namespace PopugJira.Identity
                        new IdentityResources.Phone(),
                        new IdentityResource
                        {
-                           Name = "roles",
-                           UserClaims = { ClaimTypes.Role }
+                           Name = "user-info",
+                           UserClaims = { ClaimTypes.Role, ClaimTypes.Name }
                        }
                    };
         }
@@ -52,7 +52,7 @@ namespace PopugJira.Identity
                            ClientId = "blazor-client",
                            AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                            AlwaysIncludeUserClaimsInIdToken = true,
-                           AllowedScopes = { "openid", "goal-tracker", "roles" },
+                           AllowedScopes = { "openid", "goal-tracker", "user-info" },
                            ClientSecrets =
                            {
                                new Secret("SECRET".Sha512())
@@ -72,6 +72,7 @@ namespace PopugJira.Identity
                            Password = "foobar",
                            Claims = new List<Claim>
                                     {
+                                        new Claim(ClaimTypes.Name, "Administrator"),
                                         new Claim(ClaimTypes.Role, "admin")
                                     }
                        },
@@ -82,6 +83,7 @@ namespace PopugJira.Identity
                            Password = "foobar",
                            Claims = new List<Claim>
                                     {
+                                        new Claim(ClaimTypes.Name, "Manager"),
                                         new Claim(ClaimTypes.Role, "manager")
                                     },
                        },
@@ -92,6 +94,7 @@ namespace PopugJira.Identity
                            Password = "foobar",
                            Claims = new List<Claim>
                                     {
+                                        new Claim(ClaimTypes.Name, "Programmer"),
                                         new Claim(ClaimTypes.Role, "programmer")
                                     },
                        }
