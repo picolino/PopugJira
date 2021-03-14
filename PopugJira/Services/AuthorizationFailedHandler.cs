@@ -26,7 +26,7 @@ namespace PopugJira.Services
                     var content = await response.Content.ReadAsStringAsync(cancellationToken);
                     if (string.IsNullOrWhiteSpace(content))
                     {
-                        navigationManager.NavigateTo("/login");
+                        navigationManager.NavigateTo("/login", true);
                     }
                 }
             }

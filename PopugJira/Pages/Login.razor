@@ -1,67 +1,62 @@
 ﻿@page "/login"
-@using IdentityModel.Client
 @using PopugJira.Services
+@using PopugJira.Models
 
-<div class="container">
-    <div class="row">
-        <div class="col-8">
-            <EditForm Model="loginModel">
-                <div class="mb-3">
-                    <label class="form-label">Login</label>
-                    <InputText class="form-control" @bind-Value="@loginModel.Login"/>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <InputText class="form-control" @bind-Value="@loginModel.Password"></InputText>
-                </div>
-        
-                <button type="submit" class="btn btn-primary" @onclick="@(LogIn)">Login</button>
-            </EditForm>
-        </div>
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+
+<h1>Login</h1>
+
+@if (showErrors)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>@error</p>
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Please enter your details</h5>
+        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="email">Login</label>
+                <InputText Id="email" Class="form-control" @bind-Value="loginModel.Login" />
+                <ValidationMessage For="@(() => loginModel.Login)" />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <InputText Id="password" type="password" Class="form-control" @bind-Value="loginModel.Password" />
+                <ValidationMessage For="@(() => loginModel.Password)" />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
     </div>
 </div>
 
-@inject IHttpClientFactory httpClientFactory
-@inject NavigationManager navigationManager
-@inject CurrentUserIdentity currentUserIdentity
-
 @code {
+
     private LoginModel loginModel = new LoginModel();
-    private HttpClient http;
+    private bool showErrors;
+    private string error = "";
 
-    protected override void OnInitialized()
+    private async Task HandleLogin()
     {
-        http = httpClientFactory.CreateClient();
+        showErrors = false;
+
+        var result = await AuthService.Login(loginModel.Login, loginModel.Password);
+
+        if (result.IsSuccess)
+        {
+            NavigationManager.NavigateTo("/", true);
+        }
+        else
+        {
+            error = result.Error;
+            showErrors = true;
+        }
     }
 
-    private async Task LogIn()
-    {
-        var client = new TokenClient(http,
-                                     new TokenClientOptions
-                                     {
-                                         Address = "https://localhost:5005/connect/token",
-                                         ClientId = "blazor-client",
-                                         ClientSecret = "SECRET"
-                                     });
-            
-        var token = await client.RequestPasswordTokenAsync(loginModel.Login, loginModel.Password);
-        
-        TokensContainer.GoalTrackerToken = token.AccessToken;
-
-        var ui = await http.GetUserInfoAsync(new UserInfoRequest
-                                             {
-                                                 Address = "https://localhost:5005/connect/userinfo",
-                                                 Token = token.AccessToken
-                                             });
-        
-        currentUserIdentity.SetUserByClaims(ui.Claims);
-        
-        navigationManager.NavigateTo("/");
-    }
-
-    private class LoginModel
-    {
-        public string Login { get; set; }
-        public string Password { get; set; }
-    }
 }

@@ -1,4 +1,4 @@
-﻿@using PopugJira.Services
+﻿@using Microsoft.AspNetCore.Components.Authorization
 @inherits LayoutComponentBase
 
 <div class="page">
@@ -8,34 +8,19 @@
 
     <div class="main">
         <div class="top-row px-4 auth">
-            @if (currentUserIdentity.User is null)
-            {
-                <NavLink href="login">
-                    <span class="oi oi-account-login" aria-hidden="true"></span> Log in
-                </NavLink>
-            }
-            else
-            {
-                <label>Hello, @currentUserIdentity.User.Name!</label>
-                <NavLink href="" @onclick="@(LogOut)">
-                    <span class="oi oi-account-logout" aria-hidden="true"></span> Log out
-                </NavLink>
-                
-            }
+            <AuthorizeView>
+                <Authorized>
+                    Hello, @context.User.Identity.Name!
+                    <a href="logout">Log out</a>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="register">Register</a>
+                    <a href="login">Log in</a>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
-        
         <div class="content px-4">
             @Body
         </div>
     </div>
 </div>
-
-@inject CurrentUserIdentity currentUserIdentity
-
-@code
-{
-    private void LogOut()
-    {
-        currentUserIdentity.Clear();
-    }
-}

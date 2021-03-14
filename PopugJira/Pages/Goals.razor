@@ -2,51 +2,43 @@
 @using PopugJira.Domain
 @using PopugJira.Components
 @using PopugJira.Services
+@using Microsoft.AspNetCore.Components.Authorization
 
 <h3>Goals here</h3>
 
-@if (currentUserIdentity.User is null)
-{
-    <p>Please authorize to view this page</p>
-}
-else
-{
-    <div class="d-sm-block">
-        <ul>
-            @foreach (var goal in goals)
-            {
-                <li>
-                    <a href="" @onclick="@(() => OpenEditGoalDialogForEdit(goal.Id))" @onclick:preventDefault>
-                        @if (goal.HasAssignee)
-                        {
-                            @:#@goal.Id - @goal.Title - @goal.Assignee.UserName
-                        }
-                        else
-                        {
-                            @:#@goal.Id - @goal.Title
-                        }
-                    </a>
-                    <button class="btn btn-secondary btn-sm" @onclick="@(() => RemoveGoal(goal.Id))">X</button>
-                </li>
-            }
-        </ul>
-
-        @if (currentUserIdentity.User.Role == Role.Admin
-             || currentUserIdentity.User.Role == Role.Manager)
+<div class="d-sm-block">
+    <ul>
+        @foreach (var goal in goals)
         {
+            <li>
+                <a href="" @onclick="@(() => OpenEditGoalDialogForEdit(goal.Id))" @onclick:preventDefault>
+                    @if (goal.HasAssignee)
+                    {
+                        @:#@goal.Id - @goal.Title - @goal.Assignee.UserName
+                    }
+                    else
+                    {
+                        @:#@goal.Id - @goal.Title
+                    }
+                </a>
+                <button class="btn btn-secondary btn-sm" @onclick="@(() => RemoveGoal(goal.Id))">X</button>
+            </li>
+        }
+    </ul>
+
+    <AuthorizeView Roles="admin, manager">
+        <Authorized>
             <button class="btn btn-primary" @onclick="@(OpenEditGoalDialogForCreation)">Add new goal</button>
             <button class="btn btn-primary" @onclick="@(ReassignGoals)">Reassign</button>
-        }
-        else
-        {
+        </Authorized>
+        <NotAuthorized>
             <button class="btn btn-primary" @onclick="@(OpenEditGoalDialogForCreation)">Add new goal</button>
-        }
-    </div>
-}
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
 
 @inject IModalService Modal
 @inject IHttpClientFactory HttpClientFactory
-@inject CurrentUserIdentity currentUserIdentity
 
 @code {
     private HttpClient http;
