@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
@@ -18,7 +19,7 @@ namespace PopugJira.Identity
                        new IdentityResource
                        {
                            Name = "user-info",
-                           UserClaims = { ClaimTypes.Role, ClaimTypes.Name }
+                           UserClaims = { "id", ClaimTypes.Role, ClaimTypes.Name }
                        }
                    };
         }
@@ -38,7 +39,7 @@ namespace PopugJira.Identity
                        new ApiResource("goal-tracker", "Goal Tracker API")
                        {
                            Scopes = { "goal-tracker" },
-                           UserClaims = { ClaimTypes.Role }
+                           UserClaims = { "id", ClaimTypes.Role }
                        }
                    };
         }
@@ -72,6 +73,7 @@ namespace PopugJira.Identity
                            Password = "foobar",
                            Claims = new List<Claim>
                                     {
+                                        new Claim("id", "337bce1b-2450-4a62-a5de-3af99a773e1d"),
                                         new Claim(ClaimTypes.Name, "Administrator"),
                                         new Claim(ClaimTypes.Role, "admin")
                                     }
@@ -83,6 +85,7 @@ namespace PopugJira.Identity
                            Password = "foobar",
                            Claims = new List<Claim>
                                     {
+                                        new Claim("id", "745a27f1-4c96-46fc-b6fd-c88b190ce96b"),
                                         new Claim(ClaimTypes.Name, "Manager"),
                                         new Claim(ClaimTypes.Role, "manager")
                                     },
@@ -94,6 +97,7 @@ namespace PopugJira.Identity
                            Password = "foobar",
                            Claims = new List<Claim>
                                     {
+                                        new Claim("id", "3fa85f64-5717-4562-b3fc-2c963f66afa6"),
                                         new Claim(ClaimTypes.Name, "Programmer"),
                                         new Claim(ClaimTypes.Role, "programmer")
                                     },
