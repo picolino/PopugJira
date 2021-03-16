@@ -1,3 +1,13 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
 
-<h1>Hello, world!</h1>
+<AuthorizeView>
+    <Authorized>
+        <h1>Did you saw your task list, @context.User.Identity.Name?</h1>
+        <img src="https://www.meme-arsenal.com/memes/3af4dc29c263ed6c9544e08ac0786943.jpg">
+    </Authorized>
+    <NotAuthorized>
+        <h1>Authorize. Now.</h1>
+        <img src="https://www.meme-arsenal.com/memes/67e204168b032eea544ad1a45f880945.jpg">
+    </NotAuthorized>
+</AuthorizeView>

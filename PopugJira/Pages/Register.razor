@@ -1,0 +1,71 @@
+﻿@page "/register"
+@using PopugJira.Services
+@using PopugJira.Models
+
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+
+<h1>Register</h1>
+
+@if (showErrors)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>@error</p>
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Please enter your details</h5>
+        <EditForm Model="registerModel" OnValidSubmit="HandleRegister">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="login">Login</label>
+                <InputText Id="login" Class="form-control" @bind-Value="registerModel.Login" />
+                <ValidationMessage For="@(() => registerModel.Login)" />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <InputText Id="password" type="password" Class="form-control" @bind-Value="registerModel.Password" />
+                <ValidationMessage For="@(() => registerModel.Password)" />
+            </div>
+            <div class="form-group">
+                <label for="role">Role</label>
+                <InputSelect Class="form-control" @bind-Value="registerModel.Role">
+                    <option value="admin">Administrator</option>
+                    <option value="manager">Manager</option>
+                    <option value="bookkeeper">Bookkeeper</option>
+                    <option value="programmer">Programmer</option>
+                </InputSelect>
+                <ValidationMessage For="@(() => registerModel.Role)" />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+
+    private RegisterModel registerModel = new RegisterModel();
+    private bool showErrors;
+    private string error = "";
+
+    private async Task HandleRegister()
+    {
+        showErrors = false;
+
+        var result = await AuthService.Register(registerModel);
+
+        if (result.IsSuccess)
+        {
+            NavigationManager.NavigateTo("/", true);
+        }
+        else
+        {
+            error = result.Error;
+            showErrors = true;
+        }
+    }
+}

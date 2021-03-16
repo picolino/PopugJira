@@ -1,10 +1,12 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PopugJira.GoalTracker.Application.Commands;
 using PopugJira.GoalTracker.Application.Dto;
 
 namespace PopugJira.GoalTracker.Controllers
 {
+    [Authorize(Roles = "admin, manager")]
     [ApiController]
     [Route("api/v1/assignees")]
     public class AssigneesController : ControllerBase

@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using IdentityModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PopugJira.GoalTracker.Application.Commands;
 using PopugJira.GoalTracker.Application.Dto;
@@ -8,11 +10,13 @@ using PopugJira.GoalTracker.Domain;
 
 namespace PopugJira.GoalTracker.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/v1/goals")]
     public class GoalsController : ControllerBase
     {
         private readonly AllGoalsQuery allGoalsQuery;
+        private readonly UserGoalsQuery userGoalsQuery;
         private readonly GoalQuery goalQuery;
         private readonly CreateGoalCommand createGoalCommand;
         private readonly UpdateGoalCommand updateGoalCommand;
@@ -21,6 +25,7 @@ namespace PopugJira.GoalTracker.Controllers
         private readonly CompleteGoalCommand completeGoalCommand;
 
         public GoalsController(AllGoalsQuery allGoalsQuery,
+                               UserGoalsQuery userGoalsQuery,
                                GoalQuery goalQuery,
                                CreateGoalCommand createGoalCommand,
                                UpdateGoalCommand updateGoalCommand,
@@ -29,6 +34,7 @@ namespace PopugJira.GoalTracker.Controllers
                                CompleteGoalCommand completeGoalCommand)
         {
             this.allGoalsQuery = allGoalsQuery;
+            this.userGoalsQuery = userGoalsQuery;
             this.goalQuery = goalQuery;
             this.createGoalCommand = createGoalCommand;
             this.updateGoalCommand = updateGoalCommand;
@@ -38,9 +44,20 @@ namespace PopugJira.GoalTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<Goal[]> GetAll()
+        public async Task<Goal[]> GetMineOrAll()
         {
-            return await allGoalsQuery.Query();
+            if (User.IsInRole("admin") || User.IsInRole("manager"))
+            {
+                return await allGoalsQuery.Query();
+            }
+
+            var userId = User.FindFirst(JwtClaimTypes.Subject)?.Value;
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                return await userGoalsQuery.Query(userId);
+            }
+
+            return Array.Empty<Goal>();
         }
         
         [HttpGet]
