@@ -15,6 +15,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Contract
         Task SetState(GoalState goalState, params Guid[] goalIds);
         Task SetAssignee(Guid goalId, Guid assigneeId);
         Task<Goal[]> GetAll();
+        Task<Goal[]> GetByUser(Guid userId);
         Task<Guid[]> GetIdsByState(GoalState state);
     }
 }

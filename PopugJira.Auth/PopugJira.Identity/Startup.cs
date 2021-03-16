@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Security.Claims;
-using IdentityModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PopugJira.Identity.Data;
-using PopugJira.Identity.Services;
 
 namespace PopugJira.Identity
 {
@@ -37,7 +35,6 @@ namespace PopugJira.Identity
                     .AddDefaultTokenProviders();
 
             services.AddIdentityServer()
-                    // .AddProfileService<ProfileService>()
                     .AddDeveloperSigningCredential()
                     .AddInMemoryIdentityResources(Config.GetIdentityResources())
                     .AddInMemoryApiScopes(Config.GetApiScopes())
