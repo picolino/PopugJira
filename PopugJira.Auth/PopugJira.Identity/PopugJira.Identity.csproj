@@ -6,6 +6,16 @@
 
     <ItemGroup>
       <PackageReference Include="IdentityServer4" Version="4.1.1" />
+      <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.4" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="popugjira_auth.sqlite">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </None>
     </ItemGroup>
 
 </Project>

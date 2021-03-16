@@ -1,4 +1,7 @@
 ﻿using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using IdentityModel.Client;
@@ -22,12 +25,30 @@ namespace PopugJira.Services
             this.localStorage = localStorage;
         }
 
-        // public async Task<RegisterResult> Register(RegisterModel registerModel)
-        // {
-        //     var result = await httpClientFactory.PostJsonAsync<RegisterResult>("api/accounts", registerModel);
-        //
-        //     return result;
-        // }
+        public async Task<RegisterResult> Register(RegisterModel registerModel)
+        {
+            var client = httpClientFactory.CreateClient();
+            
+            var settings = new JsonSerializerOptions();
+            settings.Converters.Add(new JsonStringEnumConverter());
+            
+            var result = await client.PostAsJsonAsync("https://localhost:5005/api/v1/accounts/register", registerModel, settings);
+            var content = await result.Content.ReadAsStringAsync();
+            
+            if (!result.IsSuccessStatusCode)
+            {
+                return new RegisterResult
+                       {
+                           IsSuccess = false,
+                           Error = content
+                       };
+            }
+            
+            return new RegisterResult
+                   {
+                       IsSuccess = true
+                   };
+        }
 
         public async Task<LoginResult> Login(string login, string password)
         {
