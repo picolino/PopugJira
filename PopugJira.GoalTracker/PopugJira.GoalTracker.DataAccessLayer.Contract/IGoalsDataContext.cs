@@ -8,14 +8,14 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Contract
     public interface IGoalsDataContext
     {
         Task Create(Goal goal);
-        Task<Goal> Get(Guid id);
-        Task Update(Guid id, string title, string description);
-        Task Delete(Guid id);
+        Task<Goal> Get(string id);
+        Task Update(string id, string title, string description);
+        Task Delete(string id);
 
-        Task SetState(GoalState goalState, params Guid[] goalIds);
-        Task SetAssignee(Guid goalId, Guid assigneeId);
+        Task SetState(GoalState goalState, params string[] goalIds);
+        Task SetAssignee(string goalId, string assigneeId);
         Task<Goal[]> GetAll();
-        Task<Goal[]> GetByUser(Guid userId);
-        Task<Guid[]> GetIdsByState(GoalState state);
+        Task<Goal[]> GetByUser(string userId);
+        Task<string[]> GetIdsByState(GoalState state);
     }
 }

@@ -8,12 +8,12 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Migrations
         public override void Up()
         {
             Create.Table("assignees")
-                  .WithColumn("id").AsGuid().PrimaryKey()
-                  .WithColumn("user_id").AsGuid().NotNullable()
+                  .WithColumn("id").AsString().PrimaryKey()
+                  .WithColumn("user_id").AsString().NotNullable()
                   .WithColumn("user_name").AsString().NotNullable();
             
             Alter.Table("goals")
-                 .AddColumn("assignee_id").AsGuid().Nullable().ForeignKey("assignees", "id");
+                 .AddColumn("assignee_id").AsString().Nullable().ForeignKey("assignees", "id");
         }
     }
 }

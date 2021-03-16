@@ -6,6 +6,6 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Contract
 {
     public interface IAssigneesGetDbOperations
     {
-        Task<Guid[]> GetAllIds();
+        Task<string[]> GetAllIds();
     }
 }

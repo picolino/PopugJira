@@ -8,7 +8,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Migrations
         public override void Up()
         {
             Create.Table("goals")
-                  .WithColumn("id").AsGuid().PrimaryKey()
+                  .WithColumn("id").AsString().PrimaryKey()
                   .WithColumn("title").AsString().NotNullable().Indexed()
                   .WithColumn("description").AsString().Nullable()
                   .WithColumn("state").AsInt32().NotNullable().Indexed();

@@ -15,7 +15,7 @@ namespace PopugJira.GoalTracker.Application.Commands
             this.goalsDataContext = goalsDataContext;
         }
         
-        public async Task Execute(Guid id)
+        public async Task Execute(string id)
         {
             await goalsDataContext.SetState(GoalState.Complete, id);
         }
