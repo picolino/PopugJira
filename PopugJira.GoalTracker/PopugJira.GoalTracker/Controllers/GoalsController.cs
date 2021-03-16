@@ -45,7 +45,7 @@ namespace PopugJira.GoalTracker.Controllers
         
         [HttpGet]
         [Route("{id}")]
-        public async Task<Goal> Get([FromRoute] Guid id)
+        public async Task<Goal> Get([FromRoute] string id)
         {
             return await goalQuery.Query(id);
         }
@@ -59,7 +59,7 @@ namespace PopugJira.GoalTracker.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task Update([FromRoute] Guid id, [FromBody] GoalUpdateDto goalUpdateDto)
+        public async Task Update([FromRoute] string id, [FromBody] GoalUpdateDto goalUpdateDto)
         {
             goalUpdateDto.Id = id;
             await updateGoalCommand.Execute(goalUpdateDto);
@@ -67,21 +67,21 @@ namespace PopugJira.GoalTracker.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task Delete([FromRoute] Guid id)
+        public async Task Delete([FromRoute] string id)
         {
             await deleteGoalCommand.Execute(id);
         }
 
         [HttpPost]
         [Route("workflow/{id}/reopen")]
-        public async Task Reopen([FromRoute] Guid id)
+        public async Task Reopen([FromRoute] string id)
         {
             await reopenGoalCommand.Execute(id);
         }
 
         [HttpPost]
         [Route("workflow/{id}/complete")]
-        public async Task Complete([FromRoute] Guid id)
+        public async Task Complete([FromRoute] string id)
         {
             await completeGoalCommand.Execute(id);
         }

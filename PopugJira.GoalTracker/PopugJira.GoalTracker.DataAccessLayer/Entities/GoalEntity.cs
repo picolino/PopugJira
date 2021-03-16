@@ -10,7 +10,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Entities
     {
         [PrimaryKey]
         [Column("id")]
-        public Guid Id { get; init; }
+        public string Id { get; init; }
         
         [Column("title")]
         public string Title { get; init; }
@@ -22,7 +22,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Entities
         public GoalState State { get; init; }
         
         [Column("assignee_id")]
-        public Guid? AssigneeId { get; init; }
+        public string AssigneeId { get; init; }
         
         [Association(ThisKey = nameof(AssigneeId), OtherKey = nameof(AssigneeEntity.Id))]
         public AssigneeEntity Assignee { get; init; }

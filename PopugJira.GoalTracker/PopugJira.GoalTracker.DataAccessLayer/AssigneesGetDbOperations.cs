@@ -15,7 +15,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer
         {
         }
 
-        public async Task<Guid[]> GetAllIds()
+        public async Task<string[]> GetAllIds()
         {
             return await Assignees.Select(o => o.Id)
                                   .ToArrayAsync();

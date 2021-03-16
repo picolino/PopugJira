@@ -4,15 +4,15 @@ namespace PopugJira.GoalTracker.Domain
 {
     public class Assignee
     {
-        public Assignee(Guid? id, Guid userId, string userName)
+        public Assignee(string id, string userId, string userName)
         {
             Id = id;
             UserId = userId;
             UserName = userName;
         }
 
-        public Guid? Id { get; }
-        public Guid UserId { get; }
+        public string Id { get; }
+        public string UserId { get; }
         public string UserName { get; }
     }
 }

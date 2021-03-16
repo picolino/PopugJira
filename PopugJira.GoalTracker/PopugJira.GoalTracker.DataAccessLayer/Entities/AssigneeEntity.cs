@@ -9,10 +9,10 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Entities
     {
         [PrimaryKey]
         [Column("id")]
-        public Guid Id { get; init; }
+        public string Id { get; init; }
         
         [Column("user_id")]
-        public Guid UserId { get; init; }
+        public string UserId { get; init; }
         
         [Column("user_name")]
         public string UserName { get; init; }

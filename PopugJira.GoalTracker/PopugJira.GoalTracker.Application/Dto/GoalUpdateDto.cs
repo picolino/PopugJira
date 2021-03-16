@@ -4,6 +4,6 @@ namespace PopugJira.GoalTracker.Application.Dto
 {
     public record GoalUpdateDto : GoalCreateDto
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
     }
 }
