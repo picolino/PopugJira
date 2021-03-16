@@ -31,22 +31,7 @@ namespace PopugJira.Identity
                                                             options.UseSqlite(Configuration.GetConnectionString("SQLite"),
                                                                               o => o.MigrationsAssembly(migrationsAssembly)));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
-                                                             {
-                                                                 options.SignIn.RequireConfirmedAccount = false;
-                                                                 options.SignIn.RequireConfirmedEmail = false;
-                                                                 options.SignIn.RequireConfirmedPhoneNumber = false;
-
-                                                                 options.Password.RequireDigit = false;
-                                                                 options.Password.RequiredLength = 4;
-                                                                 options.Password.RequireLowercase = false;
-                                                                 options.Password.RequireUppercase = false;
-                                                                 options.Password.RequiredUniqueChars = 0;
-                                                                 options.Password.RequireNonAlphanumeric = false;
-
-                                                                 options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Name;
-                                                                 options.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
-                                                             })
+            services.AddIdentity<IdentityUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
@@ -57,6 +42,23 @@ namespace PopugJira.Identity
                     .AddInMemoryApiResources(Config.GetApiResources())
                     .AddInMemoryClients(Config.GetClients())
                     .AddAspNetIdentity<IdentityUser>();
+
+            services.Configure<IdentityOptions>(options =>
+                                                {
+                                                    options.SignIn.RequireConfirmedAccount = false;
+                                                    options.SignIn.RequireConfirmedEmail = false;
+                                                    options.SignIn.RequireConfirmedPhoneNumber = false;
+
+                                                    options.Password.RequireDigit = false;
+                                                    options.Password.RequiredLength = 4;
+                                                    options.Password.RequireLowercase = false;
+                                                    options.Password.RequireUppercase = false;
+                                                    options.Password.RequiredUniqueChars = 0;
+                                                    options.Password.RequireNonAlphanumeric = false;
+
+                                                    options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Name;
+                                                    options.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
+                                                });
 
             services.AddControllers();
 
