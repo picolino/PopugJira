@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -58,8 +59,31 @@ namespace PopugJira.Identity
                     .AddAspNetIdentity<IdentityUser>();
 
             services.AddControllers();
-            
+
+            CreateRoles(services).Wait();
             // Resolving
+        }
+
+        private static async Task CreateRoles(IServiceCollection serviceCollection)
+        {
+            await using var sp = serviceCollection.BuildServiceProvider();
+            var roleManager = sp.GetService<RoleManager<IdentityRole>>();
+                                   
+            var roles = new[]
+                        {
+                            "admin",
+                            "programmer",
+                            "bookkeeper",
+                            "manager"
+                        };
+
+            foreach (var roleName in roles)
+            {
+                if (roleManager != null && !await roleManager.RoleExistsAsync(roleName))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
