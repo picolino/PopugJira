@@ -54,10 +54,7 @@ namespace PopugJira.GoalTracker.Controllers
             var userId = User.FindFirst(JwtClaimTypes.Subject)?.Value;
             if (!string.IsNullOrWhiteSpace(userId))
             {
-                if (Guid.TryParse(userId, out var guid))
-                {
-                    return await userGoalsQuery.Query(guid);
-                };
+                return await userGoalsQuery.Query(userId);
             }
 
             return Array.Empty<Goal>();
