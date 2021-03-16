@@ -2,5 +2,6 @@
 {
     public class UserDeletedEvent
     {
+        public string Id { get; set; }
     }
 }

@@ -2,5 +2,6 @@
 {
     public class GoalDeletedEvent
     {
+        public string Id { get; set; }
     }
 }
