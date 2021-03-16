@@ -29,8 +29,23 @@ namespace PopugJira.Identity
             services.AddDbContext<ApplicationDbContext>(options =>
                                                             options.UseSqlite(Configuration.GetConnectionString("SQLite"),
                                                                               o => o.MigrationsAssembly(migrationsAssembly)));
-            
-            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+                                                             {
+                                                                 options.SignIn.RequireConfirmedAccount = false;
+                                                                 options.SignIn.RequireConfirmedEmail = false;
+                                                                 options.SignIn.RequireConfirmedPhoneNumber = false;
+
+                                                                 options.Password.RequireDigit = false;
+                                                                 options.Password.RequiredLength = 4;
+                                                                 options.Password.RequireLowercase = false;
+                                                                 options.Password.RequireUppercase = false;
+                                                                 options.Password.RequiredUniqueChars = 0;
+                                                                 options.Password.RequireNonAlphanumeric = false;
+
+                                                                 options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Name;
+                                                                 options.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
+                                                             })
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
@@ -42,24 +57,9 @@ namespace PopugJira.Identity
                     .AddInMemoryClients(Config.GetClients())
                     .AddAspNetIdentity<IdentityUser>();
 
-            services.Configure<IdentityOptions>(options =>
-                                                {
-                                                    options.SignIn.RequireConfirmedAccount = false;
-                                                    options.SignIn.RequireConfirmedEmail = false;
-                                                    options.SignIn.RequireConfirmedPhoneNumber = false;
-
-                                                    options.Password.RequireDigit = false;
-                                                    options.Password.RequiredLength = 4;
-                                                    options.Password.RequireLowercase = false;
-                                                    options.Password.RequireUppercase = false;
-                                                    options.Password.RequiredUniqueChars = 0;
-                                                    options.Password.RequireNonAlphanumeric = false;
-
-                                                    options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Name;
-                                                    options.ClaimsIdentity.RoleClaimType = ClaimTypes.Role;
-                                                });
-
             services.AddControllers();
+            
+            // Resolving
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,7 +78,6 @@ namespace PopugJira.Identity
             app.UseEndpoints(endpoints =>
                              {
                                  endpoints.MapDefaultControllerRoute();
-                                 // endpoints.MapRazorPages(); // This one!
                              });
         }
     }

@@ -8,6 +8,10 @@
       <PackageReference Include="IdentityServer4" Version="4.1.1" />
       <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.4" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.4">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.4" />
     </ItemGroup>
 
