@@ -1,0 +1,15 @@
+﻿@page "/logout"
+@using PopugJira.Services
+
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AuthService.Logout();
+        NavigationManager.NavigateTo("/");
+    }
+
+}

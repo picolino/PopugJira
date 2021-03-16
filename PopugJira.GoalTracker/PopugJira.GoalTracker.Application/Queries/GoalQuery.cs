@@ -15,7 +15,7 @@ namespace PopugJira.GoalTracker.Application.Queries
             this.goalsDataContext = goalsDataContext;
         }
         
-        public async Task<Goal> Query(Guid id)
+        public async Task<Goal> Query(string id)
         {
             return await goalsDataContext.Get(id);
         }

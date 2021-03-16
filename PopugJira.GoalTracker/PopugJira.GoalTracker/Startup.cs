@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using FluentMigrator.Runner;
+using IdentityModel;
 using LinqToDB.AspNet;
 using LinqToDB.AspNet.Logging;
 using Microsoft.AspNetCore.Builder;
@@ -36,6 +38,15 @@ namespace PopugJira.GoalTracker
         {
             services.AddControllers();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "PopugJira.GoalTracker", Version = "v1"}); });
+
+            services.AddAuthentication("IdentityBearer")
+                    .AddIdentityServerAuthentication("IdentityBearer",
+                                                     options =>
+                                                     {
+                                                         options.Authority = "https://localhost:5005";
+                                                         options.RequireHttpsMetadata = false;
+                                                         options.RoleClaimType = ClaimTypes.Role;
+                                                     });
 
             var sqliteConnectionString = Configuration.GetConnectionString("SQLite");
 
@@ -74,6 +85,7 @@ namespace PopugJira.GoalTracker
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

@@ -5,7 +5,7 @@ namespace PopugJira.GoalTracker.Domain
 {
     public class Goal
     {
-        public Goal(Guid? id,
+        public Goal(string id,
                     string title,
                     string description, 
                     GoalState state, 
@@ -18,7 +18,7 @@ namespace PopugJira.GoalTracker.Domain
             Assignee = assignee;
         }
 
-        public Guid? Id { get; }
+        public string Id { get; }
         public string Title { get; }
         public string Description { get; }
         public GoalState State { get; }

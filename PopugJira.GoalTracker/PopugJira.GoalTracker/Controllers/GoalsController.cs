@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using IdentityModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PopugJira.GoalTracker.Application.Commands;
 using PopugJira.GoalTracker.Application.Dto;
@@ -8,11 +10,13 @@ using PopugJira.GoalTracker.Domain;
 
 namespace PopugJira.GoalTracker.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/v1/goals")]
     public class GoalsController : ControllerBase
     {
         private readonly AllGoalsQuery allGoalsQuery;
+        private readonly UserGoalsQuery userGoalsQuery;
         private readonly GoalQuery goalQuery;
         private readonly CreateGoalCommand createGoalCommand;
         private readonly UpdateGoalCommand updateGoalCommand;
@@ -21,6 +25,7 @@ namespace PopugJira.GoalTracker.Controllers
         private readonly CompleteGoalCommand completeGoalCommand;
 
         public GoalsController(AllGoalsQuery allGoalsQuery,
+                               UserGoalsQuery userGoalsQuery,
                                GoalQuery goalQuery,
                                CreateGoalCommand createGoalCommand,
                                UpdateGoalCommand updateGoalCommand,
@@ -29,6 +34,7 @@ namespace PopugJira.GoalTracker.Controllers
                                CompleteGoalCommand completeGoalCommand)
         {
             this.allGoalsQuery = allGoalsQuery;
+            this.userGoalsQuery = userGoalsQuery;
             this.goalQuery = goalQuery;
             this.createGoalCommand = createGoalCommand;
             this.updateGoalCommand = updateGoalCommand;
@@ -38,14 +44,25 @@ namespace PopugJira.GoalTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<Goal[]> GetAll()
+        public async Task<Goal[]> GetMineOrAll()
         {
-            return await allGoalsQuery.Query();
+            if (User.IsInRole("admin") || User.IsInRole("manager"))
+            {
+                return await allGoalsQuery.Query();
+            }
+
+            var userId = User.FindFirst(JwtClaimTypes.Subject)?.Value;
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                return await userGoalsQuery.Query(userId);
+            }
+
+            return Array.Empty<Goal>();
         }
         
         [HttpGet]
         [Route("{id}")]
-        public async Task<Goal> Get([FromRoute] Guid id)
+        public async Task<Goal> Get([FromRoute] string id)
         {
             return await goalQuery.Query(id);
         }
@@ -59,7 +76,7 @@ namespace PopugJira.GoalTracker.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task Update([FromRoute] Guid id, [FromBody] GoalUpdateDto goalUpdateDto)
+        public async Task Update([FromRoute] string id, [FromBody] GoalUpdateDto goalUpdateDto)
         {
             goalUpdateDto.Id = id;
             await updateGoalCommand.Execute(goalUpdateDto);
@@ -67,21 +84,21 @@ namespace PopugJira.GoalTracker.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task Delete([FromRoute] Guid id)
+        public async Task Delete([FromRoute] string id)
         {
             await deleteGoalCommand.Execute(id);
         }
 
         [HttpPost]
         [Route("workflow/{id}/reopen")]
-        public async Task Reopen([FromRoute] Guid id)
+        public async Task Reopen([FromRoute] string id)
         {
             await reopenGoalCommand.Execute(id);
         }
 
         [HttpPost]
         [Route("workflow/{id}/complete")]
-        public async Task Complete([FromRoute] Guid id)
+        public async Task Complete([FromRoute] string id)
         {
             await completeGoalCommand.Execute(id);
         }

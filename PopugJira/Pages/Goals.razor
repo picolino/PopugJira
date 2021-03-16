@@ -1,6 +1,8 @@
 @page "/goals"
 @using PopugJira.Domain
 @using PopugJira.Components
+@using PopugJira.Services
+@using Microsoft.AspNetCore.Components.Authorization
 
 <h3>Goals here</h3>
 
@@ -23,12 +25,21 @@
             </li>
         }
     </ul>
-    
-    <button class="btn btn-primary" @onclick="@(OpenEditGoalDialogForCreation)">Add new goal</button>
+
+    <AuthorizeView Roles="admin, manager">
+        <Authorized>
+            <button class="btn btn-primary" @onclick="@(OpenEditGoalDialogForCreation)">Add new goal</button>
+            <button class="btn btn-primary" @onclick="@(ReassignGoals)">Reassign</button>
+        </Authorized>
+        <NotAuthorized>
+            <button class="btn btn-primary" @onclick="@(OpenEditGoalDialogForCreation)">Add new goal</button>
+        </NotAuthorized>
+    </AuthorizeView>
 </div>
 
 @inject IModalService Modal
 @inject IHttpClientFactory HttpClientFactory
+
 @code {
     private HttpClient http;
     private List<Goal> goals = new ();
@@ -68,6 +79,12 @@
         await http.DeleteAsync($"/api/v1/goals/{id}");
         await RefreshGoalsList();
         Console.WriteLine($"Deleted {id}");
+    }
+
+    private async Task ReassignGoals()
+    {
+        await http.PostAsync("api/v1/assignees/reassign", new StringContent(string.Empty));
+        await RefreshGoalsList();
     }
 
     private async Task RefreshGoalsList()

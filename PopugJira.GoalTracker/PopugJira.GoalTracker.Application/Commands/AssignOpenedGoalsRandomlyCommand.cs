@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using PopugJira.AutoDI;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
@@ -26,9 +27,12 @@ namespace PopugJira.GoalTracker.Application.Commands
             var incompleteGoalIds = await goalsDataContext.GetIdsByState(GoalState.Incomplete);
             var assigneesIds = await assigneesGetDbOperations.GetAllIds();
 
-            foreach (var goalId in incompleteGoalIds)
+            if (assigneesIds.Any())
             {
-                await goalsDataContext.SetAssignee(goalId, assigneesIds[random.Next(0, assigneesIds.Length)]);
+                foreach (var goalId in incompleteGoalIds)
+                {
+                    await goalsDataContext.SetAssignee(goalId, assigneesIds[random.Next(0, assigneesIds.Length)]);
+                }
             }
         }
     }
