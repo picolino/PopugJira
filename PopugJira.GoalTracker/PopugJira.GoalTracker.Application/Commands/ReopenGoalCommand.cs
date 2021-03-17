@@ -8,16 +8,16 @@ namespace PopugJira.GoalTracker.Application.Commands
 {
     public class ReopenGoalCommand : ICommand
     {
-        private readonly IGoalsDataContext goalsDataContext;
+        private readonly IGoalsWriteDbOperations goalsWriteDbOperations;
 
-        public ReopenGoalCommand(IGoalsDataContext goalsDataContext)
+        public ReopenGoalCommand(IGoalsWriteDbOperations goalsWriteDbOperations)
         {
-            this.goalsDataContext = goalsDataContext;
+            this.goalsWriteDbOperations = goalsWriteDbOperations;
         }
         
         public async Task Execute(string id)
         {
-            await goalsDataContext.SetState(GoalState.Incomplete, id);
+            await goalsWriteDbOperations.SetState(GoalState.Incomplete, id);
         }
     }
 }

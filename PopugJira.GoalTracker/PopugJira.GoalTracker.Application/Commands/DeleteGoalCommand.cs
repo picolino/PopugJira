@@ -7,16 +7,16 @@ namespace PopugJira.GoalTracker.Application.Commands
 {
     public class DeleteGoalCommand : ICommand
     {
-        private readonly IGoalsDataContext goalsDataContext;
+        private readonly IGoalsWriteDbOperations goalsWriteDbOperations;
 
-        public DeleteGoalCommand(IGoalsDataContext goalsDataContext)
+        public DeleteGoalCommand(IGoalsWriteDbOperations goalsWriteDbOperations)
         {
-            this.goalsDataContext = goalsDataContext;
+            this.goalsWriteDbOperations = goalsWriteDbOperations;
         }
 
         public async Task Execute(string id)
         {
-            await goalsDataContext.Delete(id);
+            await goalsWriteDbOperations.Delete(id);
         }
     }
 }

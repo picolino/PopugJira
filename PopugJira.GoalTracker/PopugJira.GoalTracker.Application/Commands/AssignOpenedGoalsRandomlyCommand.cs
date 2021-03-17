@@ -9,14 +9,17 @@ namespace PopugJira.GoalTracker.Application.Commands
 {
     public class AssignOpenedGoalsRandomlyCommand : ICommand
     {
-        private readonly IGoalsDataContext goalsDataContext;
+        private readonly IGoalsGetDbOperations goalsGetDbOperations;
+        private readonly IGoalsWriteDbOperations goalsWriteDbOperations;
         private readonly IAssigneesGetDbOperations assigneesGetDbOperations;
         private readonly Random random;
 
-        public AssignOpenedGoalsRandomlyCommand(IGoalsDataContext goalsDataContext,
+        public AssignOpenedGoalsRandomlyCommand(IGoalsGetDbOperations goalsGetDbOperations,
+                                                IGoalsWriteDbOperations goalsWriteDbOperations,
                                                 IAssigneesGetDbOperations assigneesGetDbOperations)
         {
-            this.goalsDataContext = goalsDataContext;
+            this.goalsGetDbOperations = goalsGetDbOperations;
+            this.goalsWriteDbOperations = goalsWriteDbOperations;
             this.assigneesGetDbOperations = assigneesGetDbOperations;
 
             random = new Random();
@@ -24,14 +27,14 @@ namespace PopugJira.GoalTracker.Application.Commands
         
         public async Task Execute()
         {
-            var incompleteGoalIds = await goalsDataContext.GetIdsByState(GoalState.Incomplete);
+            var incompleteGoalIds = await goalsGetDbOperations.GetIdsByState(GoalState.Incomplete);
             var assigneesIds = await assigneesGetDbOperations.GetAllIds();
 
             if (assigneesIds.Any())
             {
                 foreach (var goalId in incompleteGoalIds)
                 {
-                    await goalsDataContext.SetAssignee(goalId, assigneesIds[random.Next(0, assigneesIds.Length)]);
+                    await goalsWriteDbOperations.SetAssignee(goalId, assigneesIds[random.Next(0, assigneesIds.Length)]);
                 }
             }
         }

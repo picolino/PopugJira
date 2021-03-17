@@ -7,16 +7,16 @@ namespace PopugJira.GoalTracker.Application.Commands
 {
     public class UpdateGoalCommand : ICommand
     {
-        private readonly IGoalsDataContext goalsDataContext;
+        private readonly IGoalsWriteDbOperations goalsWriteDbOperations;
 
-        public UpdateGoalCommand(IGoalsDataContext goalsDataContext)
+        public UpdateGoalCommand(IGoalsWriteDbOperations goalsWriteDbOperations)
         {
-            this.goalsDataContext = goalsDataContext;
+            this.goalsWriteDbOperations = goalsWriteDbOperations;
         }
 
         public async Task Execute(GoalUpdateDto goalUpdateDto)
         {
-            await goalsDataContext.Update(goalUpdateDto.Id, goalUpdateDto.Title, goalUpdateDto.Description);
+            await goalsWriteDbOperations.Update(goalUpdateDto.Id, goalUpdateDto.Title, goalUpdateDto.Description);
         }
     }
 }
