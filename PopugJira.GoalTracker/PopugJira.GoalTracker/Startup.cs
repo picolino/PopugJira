@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using EasyNetQ;
+using EasyNetQ.AutoSubscribe;
 using FluentMigrator.Runner;
 using IdentityModel;
 using LinqToDB.AspNet;
@@ -16,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PopugJira.EventBus;
 using PopugJira.GoalTracker.Application;
 using PopugJira.GoalTracker.Application.Commands;
 using PopugJira.GoalTracker.DataAccessLayer;
@@ -64,10 +68,20 @@ namespace PopugJira.GoalTracker
 
             var assemblies = new[]
                              {
+                                 Assembly.GetExecutingAssembly(),
+                                 typeof(Common.AutoDiTarget).Assembly,
                                  typeof(DataAccessLayer.AutoDiTarget).Assembly,
                                  typeof(Application.AutoDiTarget).Assembly
                              };
             services.AddServiced(assemblies);
+            
+            var rabbitMessageBus = new RabbitMqMessageBus(RabbitHutch.CreateBus(Configuration.GetConnectionString("RabbitMQ")));
+            services.AddSingleton<IMessageBus>(rabbitMessageBus);
+            services.AddSingleton<RabbitScopedMessageDispatcher>();
+            services.AddSingleton(p => new AutoSubscriber(rabbitMessageBus.Bus, "goal-tracker")
+                                       {
+                                           AutoSubscriberMessageDispatcher = new RabbitScopedMessageDispatcher(p)
+                                       });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,6 +103,13 @@ namespace PopugJira.GoalTracker
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            app.ApplicationServices
+               .GetService<AutoSubscriber>()
+               .Subscribe(new[]
+                          {
+                              Assembly.GetExecutingAssembly()
+                          });
             
             ProcessMigrations(app);
         }

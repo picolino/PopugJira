@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -12,14 +12,12 @@ using Serviced;
 
 namespace PopugJira.GoalTracker.DataAccessLayer
 {
-    public class GoalsDataContext : SQLiteDatabaseConnection, IGoalsDataContext, IScoped<IGoalsDataContext>
+    public class GoalsWriteDbOperations : GoalsDbOperations, IGoalsWriteDbOperations, IScoped<IGoalsWriteDbOperations>
     {
-        private ITable<GoalEntity> Goals => GetTable<GoalEntity>();
-        
-        public GoalsDataContext(LinqToDbConnectionOptions<SQLiteDatabaseConnection> options) : base(options)
+        public GoalsWriteDbOperations(LinqToDbConnectionOptions<SQLiteDatabaseConnection> options) : base(options)
         {
         }
-
+        
         public async Task Create(Goal goal)
         {
             await Goals.InsertAsync(() => new GoalEntity
@@ -37,36 +35,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer
                        .Set(o => o.AssigneeId, assigneeId)
                        .UpdateAsync();
         }
-
-        public async Task<Goal[]> GetAll()
-        {
-            var entities = await Goals.LoadWith(o => o.Assignee)
-                                      .ToArrayAsync();
-            return entities.Select(o => o.ToDomain()).ToArray();
-        }
-
-        public async Task<Goal[]> GetByUser(string userId)
-        {
-            var entities = await Goals.LoadWith(o => o.Assignee)
-                                      .Where(o => o.AssigneeId == userId)
-                                      .ToArrayAsync();
-            return entities.Select(o => o.ToDomain()).ToArray();
-        }
-
-        public async Task<string[]> GetIdsByState(GoalState state)
-        {
-            return await Goals.Where(o => o.State == state)
-                                      .Select(o => o.Id)
-                                      .ToArrayAsync();
-        }
-
-        public async Task<Goal> Get(string id)
-        {
-            var entity = await Goals.LoadWith(o => o.Assignee)
-                                    .SingleOrDefaultAsync(o => o.Id == id);
-            return entity?.ToDomain();
-        }
-
+        
         public async Task Update(string id, string title, string description)
         {
             await Goals.Where(o => o.Id == id)

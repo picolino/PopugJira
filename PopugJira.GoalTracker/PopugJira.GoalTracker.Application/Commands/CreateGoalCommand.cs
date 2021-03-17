@@ -9,17 +9,17 @@ namespace PopugJira.GoalTracker.Application.Commands
 {
     public class CreateGoalCommand : ICommand
     {
-        private readonly IGoalsDataContext goalsDataContext;
+        private readonly IGoalsWriteDbOperations goalsWriteDbOperations;
 
-        public CreateGoalCommand(IGoalsDataContext goalsDataContext)
+        public CreateGoalCommand(IGoalsWriteDbOperations goalsWriteDbOperations)
         {
-            this.goalsDataContext = goalsDataContext;
+            this.goalsWriteDbOperations = goalsWriteDbOperations;
         }
 
         public async Task Execute(GoalCreateDto goalCreateDto)
         {
             var goal = new Goal(null, goalCreateDto.Title, goalCreateDto.Description, GoalState.Incomplete);
-            await goalsDataContext.Create(goal);
+            await goalsWriteDbOperations.Create(goal);
         }
     }
 }

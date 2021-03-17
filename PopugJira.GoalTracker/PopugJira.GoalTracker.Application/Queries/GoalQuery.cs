@@ -8,16 +8,16 @@ namespace PopugJira.GoalTracker.Application.Queries
 {
     public class GoalQuery : IQuery
     {
-        private readonly IGoalsDataContext goalsDataContext;
+        private readonly IGoalsGetDbOperations goalsGetDbOperations;
 
-        public GoalQuery(IGoalsDataContext goalsDataContext)
+        public GoalQuery(IGoalsGetDbOperations goalsGetDbOperations)
         {
-            this.goalsDataContext = goalsDataContext;
+            this.goalsGetDbOperations = goalsGetDbOperations;
         }
         
         public async Task<Goal> Query(string id)
         {
-            return await goalsDataContext.Get(id);
+            return await goalsGetDbOperations.Get(id);
         }
     }
 }
