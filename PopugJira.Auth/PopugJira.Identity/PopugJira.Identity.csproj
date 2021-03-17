@@ -22,4 +22,8 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\PopugJira.EventBus\PopugJira.EventBus\PopugJira.EventBus.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -1,6 +1,8 @@
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using EasyNetQ;
+using EasyNetQ.AutoSubscribe;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PopugJira.EventBus;
 using PopugJira.Identity.Data;
 
 namespace PopugJira.Identity
@@ -62,8 +65,10 @@ namespace PopugJira.Identity
 
             services.AddControllers();
 
+            var rabbitMessageBus = new RabbitMqMessageBus(RabbitHutch.CreateBus(Configuration.GetConnectionString("RabbitMQ")));
+            services.AddSingleton<IMessageBus>(rabbitMessageBus);
+
             CreateRoles(services).Wait();
-            // Resolving
         }
 
         private static async Task CreateRoles(IServiceCollection serviceCollection)
