@@ -1,16 +1,16 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using PopugJira.AutoDI;
 using PopugJira.Common;
 using PopugJira.EventBus;
 using PopugJira.EventBus.Events.BusinessEvents;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
 using PopugJira.GoalTracker.Domain.Definitions;
+using Serviced;
 
 namespace PopugJira.GoalTracker.Application.Commands
 {
-    public class AssignOpenedGoalsRandomlyCommand : ICommand
+    public class AssignOpenedGoalsRandomlyCommand : IScoped
     {
         private readonly IGoalsGetDbOperations goalsGetDbOperations;
         private readonly IGoalsWriteDbOperations goalsWriteDbOperations;

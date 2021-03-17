@@ -6,12 +6,11 @@
 
     <ItemGroup>
         <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\PopugJira.EventBus\PopugJira.EventBus\PopugJira.EventBus.csproj" />
-      <ProjectReference Include="..\..\PopugJira.Shared\PopugJira.AutoDI\PopugJira.AutoDI.csproj" />
+      <ProjectReference Include="..\..\PopugJira.Shared\PopugJira.Microservice\PopugJira.Microservice.csproj" />
       <ProjectReference Include="..\PopugJira.GoalTracker.Application\PopugJira.GoalTracker.Application.csproj" />
       <ProjectReference Include="..\PopugJira.GoalTracker.DataAccessLayer\PopugJira.GoalTracker.DataAccessLayer.csproj" />
     </ItemGroup>

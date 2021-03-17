@@ -1,12 +1,11 @@
-using System;
 using System.Threading.Tasks;
-using PopugJira.AutoDI;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
 using PopugJira.GoalTracker.Domain;
+using Serviced;
 
 namespace PopugJira.GoalTracker.Application.Queries
 {
-    public class UserGoalsQuery : IQuery
+    public class UserGoalsQuery : IScoped
     {
         private readonly IGoalsGetDbOperations goalsGetDbOperations;
 

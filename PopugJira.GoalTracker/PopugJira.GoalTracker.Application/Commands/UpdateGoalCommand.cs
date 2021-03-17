@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
-using PopugJira.AutoDI;
 using PopugJira.GoalTracker.Application.Dto;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
+using Serviced;
 
 namespace PopugJira.GoalTracker.Application.Commands
 {
-    public class UpdateGoalCommand : ICommand
+    public class UpdateGoalCommand : IScoped
     {
         private readonly IGoalsWriteDbOperations goalsWriteDbOperations;
 
