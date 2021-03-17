@@ -69,6 +69,7 @@ namespace PopugJira.GoalTracker
             var assemblies = new[]
                              {
                                  Assembly.GetExecutingAssembly(),
+                                 typeof(Common.AutoDiTarget).Assembly,
                                  typeof(DataAccessLayer.AutoDiTarget).Assembly,
                                  typeof(Application.AutoDiTarget).Assembly
                              };

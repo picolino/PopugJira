@@ -3,6 +3,7 @@ using PopugJira.AutoDI;
 using PopugJira.GoalTracker.Application.Dto;
 using PopugJira.GoalTracker.DataAccessLayer.Contract;
 using PopugJira.GoalTracker.Domain;
+using Serviced;
 
 namespace PopugJira.GoalTracker.Application.Commands
 {
