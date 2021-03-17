@@ -5,6 +5,8 @@ using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PopugJira.EventBus;
+using PopugJira.EventBus.Events.UserCud;
 using PopugJira.Identity.Models;
 
 namespace PopugJira.Identity.Controllers
@@ -15,10 +17,12 @@ namespace PopugJira.Identity.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> userManager;
+        private readonly IMessageBus messageBus;
 
-        public AccountController(UserManager<IdentityUser> userManager)
+        public AccountController(UserManager<IdentityUser> userManager, IMessageBus messageBus)
         {
             this.userManager = userManager;
+            this.messageBus = messageBus;
         }
         
         [HttpPost("register")]
@@ -36,6 +40,12 @@ namespace PopugJira.Identity.Controllers
                                                                  });
                 if (result.Succeeded && roleAdd.Succeeded && claimsAdd.Succeeded)
                 {
+                    await messageBus.Publish(new UserCreatedEvent
+                                             {
+                                                 Id = user.Id,
+                                                 Name = user.UserName,
+                                                 Role = model.Role
+                                             });
                     return Ok();
                 }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using EasyNetQ;
@@ -67,6 +68,7 @@ namespace PopugJira.GoalTracker
 
             var assemblies = new[]
                              {
+                                 Assembly.GetExecutingAssembly(),
                                  typeof(DataAccessLayer.AutoDiTarget).Assembly,
                                  typeof(Application.AutoDiTarget).Assembly
                              };
@@ -100,6 +102,13 @@ namespace PopugJira.GoalTracker
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            app.ApplicationServices
+               .GetService<AutoSubscriber>()
+               .Subscribe(new[]
+                          {
+                              Assembly.GetExecutingAssembly()
+                          });
             
             ProcessMigrations(app);
         }
