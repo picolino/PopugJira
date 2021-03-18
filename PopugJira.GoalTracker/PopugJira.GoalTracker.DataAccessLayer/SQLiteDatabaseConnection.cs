@@ -1,7 +1,5 @@
-using LinqToDB;
 using LinqToDB.Configuration;
 using LinqToDB.Data;
-using PopugJira.GoalTracker.DataAccessLayer.Entities;
 
 namespace PopugJira.GoalTracker.DataAccessLayer
 {
