@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\PopugJira.Shared\PopugJira.Microservice\PopugJira.Microservice.csproj" />
+      <ProjectReference Include="..\PopugJira.Accounting.Application\PopugJira.Accounting.Application.csproj" />
+      <ProjectReference Include="..\PopugJira.Accounting.DataAccessLayer\PopugJira.Accounting.DataAccessLayer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="linq2db.AspNet" Version="3.2.3" />
+    </ItemGroup>
+
+</Project>
