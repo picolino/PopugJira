@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
 using System.Reflection;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using EasyNetQ;
 using EasyNetQ.AutoSubscribe;
 using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -58,9 +55,7 @@ namespace PopugJira.Microservice
                                                      });
 
             RegisterServices(services);
-
-
-
+            
             services.AddFluentMigratorCore()
                     .ConfigureRunner(rb =>
                                      {

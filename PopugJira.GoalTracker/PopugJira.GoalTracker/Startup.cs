@@ -42,7 +42,6 @@ namespace PopugJira.GoalTracker
                                                                              options.UseSQLite(sqliteConnectionString)
                                                                                     .UseDefaultLogging(provider);
                                                                          });
-
         }
 
         protected override void RegisterApp(IApplicationBuilder app, IWebHostEnvironment env)
