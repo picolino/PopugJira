@@ -2,10 +2,11 @@
 using PopugJira.Accounting.Application.Dtos;
 using PopugJira.Accounting.DataAccessLayer.Contract;
 using PopugJira.Accounting.Domain;
+using Serviced;
 
 namespace PopugJira.Accounting.Application.Commands
 {
-    public class CreateTransactionCommand
+    public class CreateTransactionCommand : IScoped
     {
         private readonly IAccountsGetDbOperations accountsGetDbOperations;
         private readonly ITransactionsWriteDbOperations transactionsWriteDbOperations;

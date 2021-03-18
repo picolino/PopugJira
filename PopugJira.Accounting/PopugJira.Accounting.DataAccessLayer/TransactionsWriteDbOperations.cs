@@ -5,10 +5,11 @@ using LinqToDB.Configuration;
 using PopugJira.Accounting.DataAccessLayer.Contract;
 using PopugJira.Accounting.DataAccessLayer.Entities;
 using PopugJira.Accounting.Domain;
+using Serviced;
 
 namespace PopugJira.Accounting.DataAccessLayer
 {
-    public class TransactionsWriteDbOperations : TransactionsDbOperations, ITransactionsWriteDbOperations
+    public class TransactionsWriteDbOperations : TransactionsDbOperations, ITransactionsWriteDbOperations, IScoped<ITransactionsWriteDbOperations>
     {
         public TransactionsWriteDbOperations(LinqToDbConnectionOptions<SQLiteDatabaseConnection> options) : base(options)
         {
