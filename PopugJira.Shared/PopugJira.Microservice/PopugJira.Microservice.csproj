@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="FluentMigrator.Runner" Version="3.2.15" />
       <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
     </ItemGroup>

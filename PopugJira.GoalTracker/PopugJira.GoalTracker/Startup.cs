@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PopugJira.EventBus.Events.UserCud;
-using PopugJira.GoalTracker.Consumers;
 using PopugJira.GoalTracker.DataAccessLayer;
 using PopugJira.Microservice;
 using StartupBase = PopugJira.Microservice.StartupBase;
@@ -28,6 +26,13 @@ namespace PopugJira.GoalTracker
 
         protected override string MicroserviceName => "GoalTracker";
 
+        protected override void ConfigureMigrator(IMigrationRunnerBuilder runnerBuilder)
+        {
+            var sqliteConnectionString = Configuration.GetConnectionString("SQLite");
+            runnerBuilder.AddSQLite()
+                         .WithGlobalConnectionString(sqliteConnectionString);
+        }
+
         protected override void RegisterServices(IServiceCollection services)
         {
             var sqliteConnectionString = Configuration.GetConnectionString("SQLite");
@@ -38,26 +43,10 @@ namespace PopugJira.GoalTracker
                                                                                     .UseDefaultLogging(provider);
                                                                          });
 
-            services.AddFluentMigratorCore()
-                           .ConfigureRunner(rb => rb.AddSQLite()
-                                                    .WithGlobalConnectionString(sqliteConnectionString)
-                                                    .ScanIn(typeof(DataAccessLayer.Migrations.MigrationsScanTarget).Assembly).For.Migrations())
-                           .AddLogging(lb => lb.AddFluentMigratorConsole());
         }
 
         protected override void RegisterApp(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            ProcessMigrations(app);
-        }
-        
-        private static void ProcessMigrations(IApplicationBuilder app)
-        {
-            using var scope = app.ApplicationServices.CreateScope();
-            var migrationsRunner = scope.ServiceProvider.GetService<IMigrationRunner>();
-            if (migrationsRunner!.HasMigrationsToApplyUp())
-            {
-                migrationsRunner.MigrateUp();
-            }
         }
     }
 }

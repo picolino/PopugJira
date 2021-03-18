@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using EasyNetQ;
 using EasyNetQ.AutoSubscribe;
+using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +31,7 @@ namespace PopugJira.Microservice
 
         protected abstract void ConfigureSwagger(SwaggerOptions options);
         protected abstract string MicroserviceName { get; }
+        protected abstract void ConfigureMigrator(IMigrationRunnerBuilder runnerBuilder);
         protected abstract void RegisterServices(IServiceCollection services);
         protected abstract void RegisterApp(IApplicationBuilder app, IWebHostEnvironment env);
         
@@ -37,7 +39,8 @@ namespace PopugJira.Microservice
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddServiced(LoadAllDomainAssemblies());
+            var domainAssemblies = LoadAllDomainAssemblies().ToArray();
+            services.AddServiced(domainAssemblies);
             
             services.AddControllers();
 
@@ -55,6 +58,16 @@ namespace PopugJira.Microservice
                                                      });
 
             RegisterServices(services);
+
+
+
+            services.AddFluentMigratorCore()
+                    .ConfigureRunner(rb =>
+                                     {
+                                         ConfigureMigrator(rb);
+                                         rb.ScanIn(domainAssemblies).For.Migrations();
+                                     })
+                    .AddLogging(lb => lb.AddFluentMigratorConsole());
             
             var rabbitMessageBus = new RabbitMqMessageBus(RabbitHutch.CreateBus(Configuration.GetConnectionString("RabbitMQ")));
             services.AddSingleton<IMessageBus>(rabbitMessageBus);
@@ -91,6 +104,13 @@ namespace PopugJira.Microservice
             app.ApplicationServices
                .GetService<AutoSubscriber>()
                .Subscribe(AppDomain.CurrentDomain.GetAssemblies());
+            
+            using var scope = app.ApplicationServices.CreateScope();
+            var migrationsRunner = scope.ServiceProvider.GetService<IMigrationRunner>();
+            if (migrationsRunner!.HasMigrationsToApplyUp())
+            {
+                migrationsRunner.MigrateUp();
+            }
             
             RegisterApp(app, env);
         }
