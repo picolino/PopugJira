@@ -17,7 +17,7 @@ namespace PopugJira.Accounting.Application.Commands
 
         public async Task Execute(CreateAccountDto createAccountDto)
         {
-            var account = new Account(null, createAccountDto.Name, 0);
+            var account = new Account(createAccountDto.Id, createAccountDto.Name, 0);
             await accountsWriteDbOperations.Create(account);
         }
     }

@@ -19,7 +19,7 @@ namespace PopugJira.Accounting.DataAccessLayer
         {
             await Accounts.InsertAsync(() => new AccountEntity
                                              {
-                                                 Id = Guid.NewGuid().ToString(),
+                                                 Id = account.Id ?? Guid.NewGuid().ToString(),
                                                  Name = account.Name,
                                                  Balance = account.Balance
                                              });

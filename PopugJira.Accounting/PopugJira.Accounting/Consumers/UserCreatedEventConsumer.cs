@@ -21,6 +21,7 @@ namespace PopugJira.Accounting.Consumers
         {
             await createAccountCommand.Execute(new CreateAccountDto
                                                {
+                                                   Id = message.Id,
                                                    Name = message.Name
                                                });
         }
