@@ -8,18 +8,22 @@ using PopugJira.Common;
 
 namespace PopugJira.Accounting.Controllers
 {
+    // TODO: Authorization
     [ApiController]
-    [Route("api/v1/accinfo")]
+    [Route("api/v1/accounting")]
     public class AccountingInfoController : ControllerBase
     {
         private readonly IDateTimeService dateTimeService;
-        private readonly GetAccountingInfoByDayQuery getAccountingInfoByDayQuery;
+        private readonly GetAccountingInfoByPeriodQuery getAccountingInfoByPeriodQuery;
+        private readonly GetTopManagementEarnedByPeriodQuery getTopManagementEarnedByPeriodQuery;
 
         public AccountingInfoController(IDateTimeService dateTimeService,
-                                        GetAccountingInfoByDayQuery getAccountingInfoByDayQuery)
+                                        GetAccountingInfoByPeriodQuery getAccountingInfoByPeriodQuery,
+                                        GetTopManagementEarnedByPeriodQuery getTopManagementEarnedByPeriodQuery)
         {
             this.dateTimeService = dateTimeService;
-            this.getAccountingInfoByDayQuery = getAccountingInfoByDayQuery;
+            this.getAccountingInfoByPeriodQuery = getAccountingInfoByPeriodQuery;
+            this.getTopManagementEarnedByPeriodQuery = getTopManagementEarnedByPeriodQuery;
         }
 
         [HttpGet("today")]
@@ -28,8 +32,17 @@ namespace PopugJira.Accounting.Controllers
             var accountId = User.FindFirst(JwtClaimTypes.Subject)?.Value;
             var todayStart = dateTimeService.Today;
             var todayEnd = dateTimeService.Today.AddDays(1);
-            var transactions = await getAccountingInfoByDayQuery.Query(accountId, todayStart, todayEnd);
+            var transactions = await getAccountingInfoByPeriodQuery.Query(accountId, todayStart, todayEnd);
             return transactions.Select(o => new AccountingInfoItemQueryResult(o)).ToArray();
+        }
+        
+        [HttpGet("today/management")]
+        public async Task<decimal> GetManagementEarnedForToday() // TODO: Timezones support
+        {
+            var todayStart = dateTimeService.Today;
+            var todayEnd = dateTimeService.Today.AddDays(1);
+            var topManagementEarned = await getTopManagementEarnedByPeriodQuery.Query(todayStart, todayEnd);
+            return topManagementEarned;
         }
     }
 }

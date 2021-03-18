@@ -6,11 +6,11 @@ using Serviced;
 
 namespace PopugJira.Accounting.Application.Queries
 {
-    public class GetAccountingInfoByDayQuery : IScoped
+    public class GetAccountingInfoByPeriodQuery : IScoped
     {
         private readonly ITransactionsGetDbOperations transactionsGetDbOperations;
 
-        public GetAccountingInfoByDayQuery(ITransactionsGetDbOperations transactionsGetDbOperations)
+        public GetAccountingInfoByPeriodQuery(ITransactionsGetDbOperations transactionsGetDbOperations)
         {
             this.transactionsGetDbOperations = transactionsGetDbOperations;
         }
