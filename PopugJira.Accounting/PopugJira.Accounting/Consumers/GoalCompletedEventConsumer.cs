@@ -1,15 +1,32 @@
 using System.Threading;
 using System.Threading.Tasks;
 using EasyNetQ.AutoSubscribe;
+using PopugJira.Accounting.Application.Commands;
+using PopugJira.Accounting.Application.Dtos;
 using PopugJira.EventBus.Events.BusinessEvents;
+using Serviced;
 
 namespace PopugJira.Accounting.Consumers
 {
-    public class GoalCompletedEventConsumer : IConsumeAsync<GoalCompletedEvent>
+    public class GoalCompletedEventConsumer : IConsumeAsync<GoalCompletedEvent>, IScoped
     {
+        private readonly CreateTransactionCommand createTransactionCommand;
+
+        public GoalCompletedEventConsumer(CreateTransactionCommand createTransactionCommand)
+        {
+            this.createTransactionCommand = createTransactionCommand;
+        }
+        
         public async Task ConsumeAsync(GoalCompletedEvent message, CancellationToken cancellationToken = new CancellationToken())
         {
-            throw new System.NotImplementedException();
+            await createTransactionCommand.Execute(new CreateTransactionDto
+                                                   {
+                                                       Credit = 0,
+                                                       Debit = message.CompletePrice,
+                                                       AccountId = message.AssigneeId,
+                                                       DateTime = message.CompleteDateTime,
+                                                       Reason = $"Goal completed ({message.Id})"
+                                                   });
         }
     }
 }
