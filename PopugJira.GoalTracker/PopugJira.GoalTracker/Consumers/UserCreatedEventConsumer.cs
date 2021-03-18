@@ -21,8 +21,8 @@ namespace PopugJira.GoalTracker.Consumers
         {
             var assigneeCreateRequest = new AssigneeCreateDto
                                         {
-                                            UserId = message.Id,
-                                            UserName = message.Name
+                                            Id = message.Id,
+                                            Name = message.Name
                                         };
             
             await createAssigneeCommand.Execute(assigneeCreateRequest);

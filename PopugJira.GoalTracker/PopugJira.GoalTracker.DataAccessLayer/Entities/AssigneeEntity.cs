@@ -11,15 +11,12 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Entities
         [Column("id")]
         public string Id { get; init; }
         
-        [Column("user_id")]
-        public string UserId { get; init; }
-        
-        [Column("user_name")]
-        public string UserName { get; init; }
+        [Column("name")]
+        public string Name { get; init; }
 
         public Assignee ToDomain()
         {
-            return new (Id, UserId, UserName);
+            return new (Id, Name);
         }
     }
 }
