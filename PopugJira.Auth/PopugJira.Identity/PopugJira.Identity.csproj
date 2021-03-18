@@ -16,13 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="popugjira_auth.sqlite">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\PopugJira.EventBus\PopugJira.EventBus\PopugJira.EventBus.csproj" />
     </ItemGroup>
 
