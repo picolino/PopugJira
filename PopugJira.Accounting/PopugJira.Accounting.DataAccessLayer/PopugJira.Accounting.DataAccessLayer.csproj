@@ -10,6 +10,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\PopugJira.Shared\PopugJira.AutoDI\PopugJira.AutoDI.csproj" />
+      <ProjectReference Include="..\..\PopugJira.Shared\PopugJira.Common\PopugJira.Common.csproj" />
       <ProjectReference Include="..\PopugJira.Accounting.Domain\PopugJira.Accounting.Domain.csproj" />
     </ItemGroup>
 
