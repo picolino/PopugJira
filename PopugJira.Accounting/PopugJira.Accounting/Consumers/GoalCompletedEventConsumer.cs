@@ -8,7 +8,7 @@ using Serviced;
 
 namespace PopugJira.Accounting.Consumers
 {
-    public class GoalCompletedEventConsumer : IConsumeAsync<GoalCompletedEvent>, IScoped
+    public class GoalCompletedEventConsumer : IConsumeAsync<GoalCompletedEventV1>, IScoped
     {
         private readonly CreateTransactionCommand createTransactionCommand;
 
@@ -17,7 +17,7 @@ namespace PopugJira.Accounting.Consumers
             this.createTransactionCommand = createTransactionCommand;
         }
         
-        public async Task ConsumeAsync(GoalCompletedEvent message, CancellationToken cancellationToken = new CancellationToken())
+        public async Task ConsumeAsync(GoalCompletedEventV1 message, CancellationToken cancellationToken = new CancellationToken())
         {
             await createTransactionCommand.Execute(new CreateTransactionDto
                                                    {

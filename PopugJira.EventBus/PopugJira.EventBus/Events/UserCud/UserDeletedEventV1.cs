@@ -1,8 +1,7 @@
 ﻿namespace PopugJira.EventBus.Events.UserCud
 {
-    public class UserUpdatedEvent
+    public class UserDeletedEventV1
     {
         public string Id { get; set; }
-        public string Name { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using Serviced;
 
 namespace PopugJira.GoalTracker.Consumers
 {
-    public class UserCreatedEventConsumer : IConsumeAsync<UserCreatedEvent>, IScoped
+    public class UserCreatedEventConsumer : IConsumeAsync<UserCreatedEventV1>, IScoped
     {
         private readonly CreateAssigneeCommand createAssigneeCommand;
 
@@ -17,7 +17,7 @@ namespace PopugJira.GoalTracker.Consumers
             this.createAssigneeCommand = createAssigneeCommand;
         }
         
-        public async Task ConsumeAsync(UserCreatedEvent message, CancellationToken cancellationToken = new CancellationToken())
+        public async Task ConsumeAsync(UserCreatedEventV1 message, CancellationToken cancellationToken = new CancellationToken())
         {
             var assigneeCreateRequest = new AssigneeCreateDto
                                         {

@@ -2,7 +2,7 @@
 
 namespace PopugJira.EventBus.Events.BusinessEvents
 {
-    public class GoalCompletedEvent
+    public class GoalCompletedEventV1
     {
         public string Id { get; set; }
         public string AssigneeId { get; set; }

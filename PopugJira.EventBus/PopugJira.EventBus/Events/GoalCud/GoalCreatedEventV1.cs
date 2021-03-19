@@ -1,6 +1,6 @@
 ﻿namespace PopugJira.EventBus.Events.GoalCud
 {
-    public class GoalCreatedEvent
+    public class GoalCreatedEventV1
     {
         public string Id { get; set; }
         public string Title { get; set; }

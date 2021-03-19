@@ -50,7 +50,7 @@ namespace PopugJira.GoalTracker.Application.Commands
                     await goalsWriteDbOperations.SetAssignee(goalId, selectedAssigneeId);
                     var assignUtcDateTime = dateTimeService.UtcNow;
                     var assignPrice = await goalsConfigGetDbOperations.GetAssignGoalPrice();
-                    await messageBus.Publish(new GoalAssignedEvent
+                    await messageBus.Publish(new GoalAssignedEventV1
                                              {
                                                  Id = goalId,
                                                  AssigneeId = selectedAssigneeId,

@@ -8,7 +8,7 @@ using Serviced;
 
 namespace PopugJira.Accounting.Consumers
 {
-    public class UserCreatedEventConsumer : IConsumeAsync<UserCreatedEvent>, IScoped
+    public class UserCreatedEventConsumer : IConsumeAsync<UserCreatedEventV1>, IScoped
     {
         private readonly CreateAccountCommand createAccountCommand;
 
@@ -17,7 +17,7 @@ namespace PopugJira.Accounting.Consumers
             this.createAccountCommand = createAccountCommand;
         }
         
-        public async Task ConsumeAsync(UserCreatedEvent message, CancellationToken cancellationToken = new CancellationToken())
+        public async Task ConsumeAsync(UserCreatedEventV1 message, CancellationToken cancellationToken = new CancellationToken())
         {
             await createAccountCommand.Execute(new CreateAccountDto
                                                {

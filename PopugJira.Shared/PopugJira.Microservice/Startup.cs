@@ -63,8 +63,10 @@ namespace PopugJira.Microservice
                                          rb.ScanIn(domainAssemblies).For.Migrations();
                                      })
                     .AddLogging(lb => lb.AddFluentMigratorConsole());
-            
-            var rabbitMessageBus = new RabbitMqMessageBus(RabbitHutch.CreateBus(Configuration.GetConnectionString("RabbitMQ")));
+
+            var bus = RabbitHutch.CreateBus(Configuration.GetConnectionString("RabbitMQ"),
+                                            svc => svc.EnableMessageVersioning());
+            var rabbitMessageBus = new RabbitMqMessageBus(bus);
             services.AddSingleton<IMessageBus>(rabbitMessageBus);
             services.AddSingleton<RabbitScopedMessageDispatcher>();
             services.AddSingleton(p => new AutoSubscriber(rabbitMessageBus.Bus, MicroserviceName)
