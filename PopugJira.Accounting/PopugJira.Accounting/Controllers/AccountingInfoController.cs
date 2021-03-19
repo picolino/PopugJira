@@ -41,11 +41,21 @@ namespace PopugJira.Accounting.Controllers
                                                                                       [FromQuery] DateTime to)
         {
             var accountId = User.FindFirst(JwtClaimTypes.Subject)?.Value;
+            return await GetAccountingInfoForPeriodByAccount(accountId, from, to);
+        }
+
+        [Authorize(Roles = "admin, bookkeeper")]
+        [HttpGet("{accountId}/period")]
+        public async Task<AccountingInfoItemQueryResult[]> GetAccountingInfoForPeriodByAccount([FromRoute] string accountId,
+                                                                                               [FromQuery] DateTime from,
+                                                                                               [FromQuery] DateTime to)
+        {
             var transactions = await getAccountingInfoByPeriodQuery.Query(accountId, from, to);
             return transactions.Select(o => new AccountingInfoItemQueryResult(o)).ToArray();
         }
-        
-        [HttpGet("today/management")]
+
+        [Authorize(Roles = "admin, bookkeeper")]
+        [HttpGet("management/today")]
         public async Task<decimal> GetManagementEarnedForToday() // TODO: Timezones support
         {
             var todayStart = dateTimeService.Today;

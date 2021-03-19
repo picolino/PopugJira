@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using LinqToDB;
 using LinqToDB.Configuration;
 using PopugJira.Accounting.DataAccessLayer.Contract;
@@ -13,6 +14,11 @@ namespace PopugJira.Accounting.DataAccessLayer
         {
         }
 
+        public async Task<Account[]> All()
+        {
+            var entities = await Accounts.ToArrayAsync();
+            return entities.Select(o => o.ToDomain()).ToArray();
+        }
 
         public async Task<Account> Get(string id)
         {

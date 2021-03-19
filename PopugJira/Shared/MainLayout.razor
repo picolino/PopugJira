@@ -11,7 +11,7 @@
             <AuthorizeView>
                 <Authorized>
                     Hello, @context.User.Identity.Name!
-                    You earned today @EarnedToday.ToString("C2")
+                    You earned today: @EarnedToday.ToString("C2")
                     <a href="logout">Log out</a>
                 </Authorized>
                 <NotAuthorized>
@@ -26,6 +26,7 @@
     </div>
 </div>
 @inject IHttpClientFactory httpClientFactory
+@inject AuthenticationStateProvider authenticationStateProvider
 @code {
     private HttpClient http;
     
@@ -34,7 +35,12 @@
     protected override async Task OnInitializedAsync()
     {
         http = httpClientFactory.CreateClient("accounting");
-        await LoadCurrentAccountBalance();
+        var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
+        if (auth.User?.Identity?.IsAuthenticated ?? false)
+        {
+            Console.WriteLine($"Authenticated as: {auth.User.Identity.Name}");
+            await LoadCurrentAccountBalance();
+        }
     }
 
     private async Task LoadCurrentAccountBalance()

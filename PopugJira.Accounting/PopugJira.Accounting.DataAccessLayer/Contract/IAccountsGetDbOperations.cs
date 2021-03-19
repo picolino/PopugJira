@@ -5,6 +5,7 @@ namespace PopugJira.Accounting.DataAccessLayer.Contract
 {
     public interface IAccountsGetDbOperations
     {
+        Task<Account[]> All();
         Task<Account> Get(string id);
     }
 }

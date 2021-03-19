@@ -1,0 +1,88 @@
+@using BlazorDateRangePicker
+@using System.Globalization
+@using Microsoft.AspNetCore.WebUtilities
+@using PopugJira.Domain
+@page "/accounting"
+<h3>Accounting Information</h3>
+
+<div class="d-sm-block">
+    <label>Select account:</label>
+    <select value="@selectedAccountId" @onchange="@(OnSelectedAccountChanged)">
+        @foreach (var account in accounts)
+        {
+            <option value="@account.Id">@account.Name</option>
+        }
+    </select>
+    
+    <label>Select day:</label>
+    <DateRangePicker ShowOnlyOneCalendar="true" @bind-StartDate="StartDate" @bind-EndDate="EndDate"
+                     AutoApply="true"
+                     SingleDatePicker="true"
+                     Culture="CultureInfo.InvariantCulture"
+                     FirstDayOfWeek="DayOfWeek.Monday"
+                     Inline="false"
+                     OnRangeSelect="@(OnDateRangeSelected)"/>
+
+    <ul>
+        @foreach (var accountingInfoItem in accountingInfoItems)
+        {
+            <li>
+                <div class="d-inline align-content-md-center align-items-center">
+                    @if (accountingInfoItem.Amount > 0)
+                    {
+                        <span class="badge bg-success text-white align-middle">
+                            @accountingInfoItem.Amount.ToString("C2")
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger text-white align-middle">
+                            @accountingInfoItem.Amount.ToString("C2")
+                        </span>
+                    }
+                    <span class="font-weight-light align-middle">@accountingInfoItem.DateTime</span>
+                    <span class="font-weight-lighter align-middle">@accountingInfoItem.Reason</span>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+
+
+@inject IHttpClientFactory httpClientFactory
+@code {
+    private HttpClient http;
+    
+    DateTimeOffset? StartDate { get; set; } = DateTime.Today;
+    DateTimeOffset? EndDate { get; set; } = DateTime.Today;
+
+    private string selectedAccountId;
+    private Account[] accounts = Array.Empty<Account>();
+    
+    private AccountingInfoItem[] accountingInfoItems = Array.Empty<AccountingInfoItem>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        http = httpClientFactory.CreateClient("accounting");
+        accounts = await http.GetFromJsonAsync<Account[]>("api/v1/accounts");
+        selectedAccountId = accounts.First().Id;
+        await OnDateRangeSelected();
+    }
+
+    private async Task OnSelectedAccountChanged(ChangeEventArgs args)
+    {
+        selectedAccountId = args.Value?.ToString();
+        await OnDateRangeSelected();
+    }
+
+    private async Task OnDateRangeSelected()
+    {
+        var parameters = new Dictionary<string, string>
+                         {
+                             ["from"] = StartDate.Value.ToString("O"),
+                             ["to"] = EndDate.Value.AddDays(1).ToString("O")
+                         };
+        var query = QueryHelpers.AddQueryString($"api/v1/accounting/{selectedAccountId}/period", parameters);
+        accountingInfoItems = await http.GetFromJsonAsync<AccountingInfoItem[]>(query);
+    }
+}
