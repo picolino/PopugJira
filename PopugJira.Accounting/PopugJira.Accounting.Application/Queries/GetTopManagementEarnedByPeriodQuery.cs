@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using PopugJira.Accounting.DataAccessLayer.Contract;
+using Serviced;
 
 namespace PopugJira.Accounting.Application.Queries
 {
-    public class GetTopManagementEarnedByPeriodQuery
+    public class GetTopManagementEarnedByPeriodQuery : IScoped
     {
         private readonly ITransactionsGetDbOperations transactionsGetDbOperations;
 

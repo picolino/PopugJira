@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PopugJira.Accounting.Application.Dtos;
 using PopugJira.Accounting.Application.Queries;
@@ -8,7 +10,7 @@ using PopugJira.Common;
 
 namespace PopugJira.Accounting.Controllers
 {
-    // TODO: Authorization
+    [Authorize]
     [ApiController]
     [Route("api/v1/accounting")]
     public class AccountingInfoController : ControllerBase
@@ -29,10 +31,17 @@ namespace PopugJira.Accounting.Controllers
         [HttpGet("today")]
         public async Task<AccountingInfoItemQueryResult[]> GetAccountingInfoForToday() // TODO: Timezones support
         {
-            var accountId = User.FindFirst(JwtClaimTypes.Subject)?.Value;
             var todayStart = dateTimeService.Today;
             var todayEnd = dateTimeService.Today.AddDays(1);
-            var transactions = await getAccountingInfoByPeriodQuery.Query(accountId, todayStart, todayEnd);
+            return await GetAccountingInfoForPeriod(todayStart, todayEnd);
+        }
+        
+        [HttpGet("period")]
+        public async Task<AccountingInfoItemQueryResult[]> GetAccountingInfoForPeriod([FromQuery] DateTime from, 
+                                                                                      [FromQuery] DateTime to)
+        {
+            var accountId = User.FindFirst(JwtClaimTypes.Subject)?.Value;
+            var transactions = await getAccountingInfoByPeriodQuery.Query(accountId, from, to);
             return transactions.Select(o => new AccountingInfoItemQueryResult(o)).ToArray();
         }
         
