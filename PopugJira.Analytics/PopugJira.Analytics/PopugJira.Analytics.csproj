@@ -10,10 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\PopugJira.EventBus\PopugJira.EventBus\PopugJira.EventBus.csproj" />
       <ProjectReference Include="..\..\PopugJira.Shared\PopugJira.Microservice\PopugJira.Microservice.csproj" />
       <ProjectReference Include="..\PopugJira.Analytics.Application\PopugJira.Analytics.Application.csproj" />

@@ -19,8 +19,9 @@ namespace PopugJira.Analytics.Application.Commands
             if (paymentInfoDto.Earned < 0)
             {
                 var positiveEarnedForManagement = -paymentInfoDto.Earned;
-                await topManagementEarnedEntryWriteDbOperations.AddEarnedWithNegativeEmployeesCountIncrementOrCreateNew(paymentInfoDto.PaymentDateTime.Date,
-                                                                                                             positiveEarnedForManagement);
+                await topManagementEarnedEntryWriteDbOperations
+                    .AddEarnedWithNegativeEmployeesCountIncrementOrCreateNew(paymentInfoDto.PaymentDateTime,
+                                                                             positiveEarnedForManagement);
             }
         }
     }

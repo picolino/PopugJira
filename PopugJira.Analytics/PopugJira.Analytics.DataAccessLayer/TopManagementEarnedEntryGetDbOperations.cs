@@ -1,5 +1,10 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using LinqToDB;
 using LinqToDB.Configuration;
 using PopugJira.Analytics.DataAccessLayer.Contract;
+using PopugJira.Analytics.Domain;
 using Serviced;
 
 namespace PopugJira.Analytics.DataAccessLayer
@@ -8,6 +13,13 @@ namespace PopugJira.Analytics.DataAccessLayer
     {
         public TopManagementEarnedEntryGetDbOperations(LinqToDbConnectionOptions<SQLiteDatabaseConnection> options) : base(options)
         {
+        }
+
+        public async Task<TopManagementEarnedEntry[]> GetByDate(DateTime date)
+        {
+            var entities = await TopManagementEarnedEntryEntities.Where(o => o.Date == date.Date)
+                                                                 .ToArrayAsync();
+            return entities.Select(o => o.ToDomain()).ToArray();
         }
     }
 }

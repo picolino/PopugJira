@@ -32,7 +32,7 @@ namespace PopugJira.Analytics.DataAccessLayer
                                           },
                                      () => new TopManagementEarnedEntryEntity
                                            {
-                                               Date = date
+                                               Date = date.Date
                                            });
         }
     }
