@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using LinqToDB;
 using LinqToDB.Configuration;
@@ -23,6 +24,13 @@ namespace PopugJira.Accounting.DataAccessLayer
                                                  Name = account.Name,
                                                  Balance = account.Balance
                                              });
+        }
+
+        public async Task SetBalance(string accountId, decimal newBalance)
+        {
+            await Accounts.Where(o => o.Id == accountId)
+                          .Set(o => o.Balance, newBalance)
+                          .UpdateAsync();
         }
     }
 }

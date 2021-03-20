@@ -71,7 +71,7 @@
     {
         http = httpClientFactory.CreateClient("accounting");
         accounts = await http.GetFromJsonAsync<Account[]>("api/v1/accounts");
-        selectedAccountId = accounts.First().Id;
+        selectedAccountId = accounts?.FirstOrDefault()?.Id;
         var topManagementLoadingTask = LoadTopManagementInfoForSelectedDate();
         var accountingInfoLoadingTask = LoadAccountingInfoForAccount();
         await Task.WhenAll(accountingInfoLoadingTask, topManagementLoadingTask);
@@ -113,8 +113,11 @@
                              ["from"] = selectedDate.Value.ToString("O"),
                              ["to"] = selectedDate.Value.AddDays(1).ToString("O")
                          };
-        
-        var auditQuery = QueryHelpers.AddQueryString($"api/v1/accounting/{selectedAccountId}/period", parameters);
-        accountingInfoItems = await http.GetFromJsonAsync<AccountingInfoItem[]>(auditQuery);
+
+        if (selectedAccountId != null)
+        {
+            var auditQuery = QueryHelpers.AddQueryString($"api/v1/accounting/{selectedAccountId}/period", parameters);
+            accountingInfoItems = await http.GetFromJsonAsync<AccountingInfoItem[]>(auditQuery);
+        }
     }
 }

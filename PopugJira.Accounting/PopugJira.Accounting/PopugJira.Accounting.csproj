@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="FluentScheduler" Version="5.5.1" />
       <PackageReference Include="linq2db.AspNet" Version="3.2.3" />
     </ItemGroup>
 

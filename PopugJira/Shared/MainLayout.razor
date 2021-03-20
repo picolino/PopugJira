@@ -11,7 +11,6 @@
             <AuthorizeView>
                 <Authorized>
                     Hello, @context.User.Identity.Name!
-                    You earned today: @EarnedToday.ToString("C2")
                     <a href="logout">Log out</a>
                 </Authorized>
                 <NotAuthorized>
@@ -25,30 +24,3 @@
         </div>
     </div>
 </div>
-@inject IHttpClientFactory httpClientFactory
-@inject AuthenticationStateProvider authenticationStateProvider
-@code {
-    private HttpClient http;
-    
-    private decimal EarnedToday { get; set; }
-    
-    protected override async Task OnInitializedAsync()
-    {
-        http = httpClientFactory.CreateClient("accounting");
-        var auth = await authenticationStateProvider.GetAuthenticationStateAsync();
-        if (auth.User?.Identity?.IsAuthenticated ?? false)
-        {
-            Console.WriteLine($"Authenticated as: {auth.User.Identity.Name}");
-            await LoadCurrentAccountBalance();
-        }
-    }
-
-    private async Task LoadCurrentAccountBalance()
-    {
-        var accountingInfosForToday = await http.GetFromJsonAsync<AccountingInfoItem[]>("api/v1/accounting/today");
-        if (accountingInfosForToday is not null)
-        {
-            EarnedToday = accountingInfosForToday.Sum(o => o.Amount);
-        }
-    }
-}

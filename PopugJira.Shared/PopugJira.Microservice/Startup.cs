@@ -53,8 +53,6 @@ namespace PopugJira.Microservice
                                                          options.RequireHttpsMetadata = false;
                                                          options.RoleClaimType = ClaimTypes.Role;
                                                      });
-
-            RegisterServices(services);
             
             services.AddFluentMigratorCore()
                     .ConfigureRunner(rb =>
@@ -73,6 +71,8 @@ namespace PopugJira.Microservice
                                        {
                                            AutoSubscriberMessageDispatcher = new RabbitScopedMessageDispatcher(p)
                                        });
+
+            RegisterServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

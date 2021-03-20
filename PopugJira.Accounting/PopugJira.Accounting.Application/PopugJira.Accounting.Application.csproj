@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\PopugJira.EventBus\PopugJira.EventBus\PopugJira.EventBus.csproj" />
       <ProjectReference Include="..\..\PopugJira.Shared\PopugJira.AutoDI\PopugJira.AutoDI.csproj" />
       <ProjectReference Include="..\..\PopugJira.Shared\PopugJira.Common\PopugJira.Common.csproj" />
       <ProjectReference Include="..\PopugJira.Accounting.DataAccessLayer\PopugJira.Accounting.DataAccessLayer.csproj" />

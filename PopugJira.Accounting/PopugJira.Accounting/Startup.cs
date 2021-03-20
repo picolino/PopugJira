@@ -1,4 +1,6 @@
+using System;
 using FluentMigrator.Runner;
+using FluentScheduler;
 using LinqToDB.AspNet;
 using LinqToDB.AspNet.Logging;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PopugJira.Accounting.DataAccessLayer;
+using PopugJira.Accounting.Jobs;
 using PopugJira.Microservice;
 using StartupBase = PopugJira.Microservice.StartupBase;
 
@@ -46,6 +49,16 @@ namespace PopugJira.Accounting
 
         protected override void RegisterApp(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            RegisterJobs(app.ApplicationServices);
+        }
+
+        private void RegisterJobs(IServiceProvider serviceProvider)
+        {
+            var scope = serviceProvider.CreateScope();
+            var payEarnedJob = scope.ServiceProvider.GetService<PayEarnedToEmployeesJob>();
+            
+            JobManager.Initialize();
+            JobManager.AddJob(payEarnedJob, o => o.ToRunNow().AndEvery(1).Days().At(20, 00));
         }
     }
 }

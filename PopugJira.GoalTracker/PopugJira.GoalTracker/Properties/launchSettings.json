@@ -4,7 +4,6 @@
     "PopugJira.GoalTracker": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
-      "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:5003;http://localhost:5002",
       "environmentVariables": {
