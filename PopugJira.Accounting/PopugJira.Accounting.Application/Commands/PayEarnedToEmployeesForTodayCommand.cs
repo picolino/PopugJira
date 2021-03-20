@@ -30,19 +30,23 @@ namespace PopugJira.Accounting.Application.Commands
         public async Task Execute()
         {
             var accounts = await getAllAccountsQuery.Query();
-            foreach (var account in accounts.Where(o => o.Balance > 0))
+            
+            foreach (var account in accounts)
             {
                 var paymentDateTime = dateTimeService.UtcNow;
-                
-                await createTransactionCommand.Execute(new CreateTransactionDto
-                                                       {
-                                                           Debit = 0,
-                                                           Credit = -account.Balance,
-                                                           DateTime = paymentDateTime,
-                                                           AccountId = account.Id,
-                                                           Reason = "Daily payment"
-                                                       });
-                
+
+                if (account.Balance > 0)
+                {
+                    await createTransactionCommand.Execute(new CreateTransactionDto
+                                                           {
+                                                               Debit = 0,
+                                                               Credit = -account.Balance,
+                                                               DateTime = paymentDateTime,
+                                                               AccountId = account.Id,
+                                                               Reason = "Daily payment"
+                                                           });
+                }
+
                 await messageBus.Publish(new PayEarnedToEmployeesEventV1
                                          {
                                              AccountId = account.Id,

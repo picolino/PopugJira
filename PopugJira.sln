@@ -42,6 +42,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopugJira.Accounting.Applic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopugJira.Accounting.Domain", "PopugJira.Accounting\PopugJira.Accounting.Domain\PopugJira.Accounting.Domain.csproj", "{DE806C2D-DD84-4A9F-84D7-305B0C0CEC7D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PopugJira.Analytics", "PopugJira.Analytics", "{19A99D1B-E644-4758-895C-D1E87DED5C44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopugJira.Analytics", "PopugJira.Analytics\PopugJira.Analytics\PopugJira.Analytics.csproj", "{489DD924-B305-47DA-9A53-9B76F6C9F58A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopugJira.Analytics.DataAccessLayer", "PopugJira.Analytics\PopugJira.Analytics.DataAccessLayer\PopugJira.Analytics.DataAccessLayer.csproj", "{1163FE38-749E-4B63-A6D9-F99159FE7581}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopugJira.Analytics.Domain", "PopugJira.Analytics\PopugJira.Analytics.Domain\PopugJira.Analytics.Domain.csproj", "{7EF22E63-36FD-482D-90F6-09D41969AC34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopugJira.Analytics.Application", "PopugJira.Analytics\PopugJira.Analytics.Application\PopugJira.Analytics.Application.csproj", "{D0F8173B-1C38-44A3-973C-A2E764C530A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +122,22 @@ Global
 		{DE806C2D-DD84-4A9F-84D7-305B0C0CEC7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE806C2D-DD84-4A9F-84D7-305B0C0CEC7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE806C2D-DD84-4A9F-84D7-305B0C0CEC7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{489DD924-B305-47DA-9A53-9B76F6C9F58A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{489DD924-B305-47DA-9A53-9B76F6C9F58A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{489DD924-B305-47DA-9A53-9B76F6C9F58A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{489DD924-B305-47DA-9A53-9B76F6C9F58A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1163FE38-749E-4B63-A6D9-F99159FE7581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1163FE38-749E-4B63-A6D9-F99159FE7581}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1163FE38-749E-4B63-A6D9-F99159FE7581}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1163FE38-749E-4B63-A6D9-F99159FE7581}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EF22E63-36FD-482D-90F6-09D41969AC34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EF22E63-36FD-482D-90F6-09D41969AC34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EF22E63-36FD-482D-90F6-09D41969AC34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EF22E63-36FD-482D-90F6-09D41969AC34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0F8173B-1C38-44A3-973C-A2E764C530A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0F8173B-1C38-44A3-973C-A2E764C530A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0F8173B-1C38-44A3-973C-A2E764C530A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0F8173B-1C38-44A3-973C-A2E764C530A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FF5C87B2-D761-4ACF-9FE0-A5E8BA6B5ED4} = {674C402E-2DB5-47F8-8AB7-AB1AA106D2AA}
@@ -129,5 +155,9 @@ Global
 		{4AAA951D-F2C0-48C8-BA8A-A23C11CE4A1A} = {BE8F6F12-F308-458D-A853-DC4B89271B36}
 		{56DB1A8C-80A7-41BF-AEA3-652C19B9BE6E} = {BE8F6F12-F308-458D-A853-DC4B89271B36}
 		{DE806C2D-DD84-4A9F-84D7-305B0C0CEC7D} = {BE8F6F12-F308-458D-A853-DC4B89271B36}
+		{489DD924-B305-47DA-9A53-9B76F6C9F58A} = {19A99D1B-E644-4758-895C-D1E87DED5C44}
+		{1163FE38-749E-4B63-A6D9-F99159FE7581} = {19A99D1B-E644-4758-895C-D1E87DED5C44}
+		{7EF22E63-36FD-482D-90F6-09D41969AC34} = {19A99D1B-E644-4758-895C-D1E87DED5C44}
+		{D0F8173B-1C38-44A3-973C-A2E764C530A1} = {19A99D1B-E644-4758-895C-D1E87DED5C44}
 	EndGlobalSection
 EndGlobal
