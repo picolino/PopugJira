@@ -57,6 +57,7 @@ namespace PopugJira.Accounting
             var scope = serviceProvider.CreateScope();
             var payEarnedJob = scope.ServiceProvider.GetService<PayEarnedToEmployeesJob>();
             
+            // TODO: Fix to run only daily in 20:00
             JobManager.Initialize();
             JobManager.AddJob(payEarnedJob, o => o.ToRunNow().AndEvery(1).Days().At(20, 00));
         }
