@@ -11,16 +11,26 @@ namespace PopugJira.Analytics.Controllers
     public class AnalyticsController : ControllerBase
     {
         private readonly TopManagementEarnedForDayQuery topManagementEarnedForDayQuery;
+        private readonly MostCostlyGoalForPeriodQuery mostCostlyGoalForPeriodQuery;
 
-        public AnalyticsController(TopManagementEarnedForDayQuery topManagementEarnedForDayQuery)
+        public AnalyticsController(TopManagementEarnedForDayQuery topManagementEarnedForDayQuery,
+                                   MostCostlyGoalForPeriodQuery mostCostlyGoalForPeriodQuery)
         {
             this.topManagementEarnedForDayQuery = topManagementEarnedForDayQuery;
+            this.mostCostlyGoalForPeriodQuery = mostCostlyGoalForPeriodQuery;
         }
         
         [HttpGet("earned/management/{date}")]
-        public async Task<TopManagementEarnedEntry[]> QueryTopManagementEarnedFor([FromQuery] DateTime date)
+        public async Task<TopManagementEarnedEntry[]> QueryTopManagementEarnedFor([FromRoute] DateTime date)
         {
             return await topManagementEarnedForDayQuery.Query(date);
+        }
+
+        [HttpGet("goals/costly")]
+        public async Task<GoalCost> GetMostCostlyGoalFor([FromQuery] DateTime from,
+                                                         [FromQuery] DateTime to)
+        {
+            return await mostCostlyGoalForPeriodQuery.Query(from, to);
         }
     }
 }
