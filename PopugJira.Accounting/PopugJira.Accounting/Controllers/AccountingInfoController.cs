@@ -55,12 +55,11 @@ namespace PopugJira.Accounting.Controllers
         }
 
         [Authorize(Roles = "admin, bookkeeper")]
-        [HttpGet("management/today")]
-        public async Task<decimal> GetManagementEarnedForToday() // TODO: Timezones support
+        [HttpGet("management/period")]
+        public async Task<decimal> GetManagementEarnedForToday([FromQuery] DateTime from,
+                                                               [FromQuery] DateTime to)
         {
-            var todayStart = dateTimeService.Today;
-            var todayEnd = dateTimeService.Today.AddDays(1);
-            var topManagementEarned = await getTopManagementEarnedByPeriodQuery.Query(todayStart, todayEnd);
+            var topManagementEarned = await getTopManagementEarnedByPeriodQuery.Query(from, to);
             return topManagementEarned;
         }
     }

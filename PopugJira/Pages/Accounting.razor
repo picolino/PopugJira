@@ -6,6 +6,21 @@
 <h3>Accounting Information</h3>
 
 <div class="d-sm-block">
+
+    <label>Select day:</label>
+    <DateRangePicker @bind-StartDate="@selectedDate"
+                      ShowOnlyOneCalendar="true"
+                     AutoApply="true"
+                     SingleDatePicker="true"
+                     Culture="CultureInfo.InvariantCulture"
+                     FirstDayOfWeek="DayOfWeek.Monday"
+                     Inline="false"
+                     OnRangeSelect="@(OnSelectedDateChanged)"/>
+    
+    <div>
+        <label>Top management earned: @topManagementEarned.ToString("C2")</label>
+    </div>
+
     <label>Select account:</label>
     <select value="@selectedAccountId" @onchange="@(OnSelectedAccountChanged)">
         @foreach (var account in accounts)
@@ -13,15 +28,6 @@
             <option value="@account.Id">@account.Name</option>
         }
     </select>
-    
-    <label>Select day:</label>
-    <DateRangePicker ShowOnlyOneCalendar="true" @bind-StartDate="StartDate" @bind-EndDate="EndDate"
-                     AutoApply="true"
-                     SingleDatePicker="true"
-                     Culture="CultureInfo.InvariantCulture"
-                     FirstDayOfWeek="DayOfWeek.Monday"
-                     Inline="false"
-                     OnRangeSelect="@(OnDateRangeSelected)"/>
 
     <ul>
         @foreach (var accountingInfoItem in accountingInfoItems)
@@ -52,10 +58,10 @@
 @inject IHttpClientFactory httpClientFactory
 @code {
     private HttpClient http;
-    
-    DateTimeOffset? StartDate { get; set; } = DateTime.Today;
-    DateTimeOffset? EndDate { get; set; } = DateTime.Today;
 
+    decimal topManagementEarned;
+    
+    private DateTimeOffset? selectedDate = DateTime.Today;
     private string selectedAccountId;
     private Account[] accounts = Array.Empty<Account>();
     
@@ -66,23 +72,49 @@
         http = httpClientFactory.CreateClient("accounting");
         accounts = await http.GetFromJsonAsync<Account[]>("api/v1/accounts");
         selectedAccountId = accounts.First().Id;
-        await OnDateRangeSelected();
+        var topManagementLoadingTask = LoadTopManagementInfoForSelectedDate();
+        var accountingInfoLoadingTask = LoadAccountingInfoForAccount();
+        await Task.WhenAll(accountingInfoLoadingTask, topManagementLoadingTask);
     }
 
     private async Task OnSelectedAccountChanged(ChangeEventArgs args)
     {
         selectedAccountId = args.Value?.ToString();
-        await OnDateRangeSelected();
+        await LoadAccountingInfoForAccount();
     }
 
-    private async Task OnDateRangeSelected()
+    private async Task OnSelectedDateChanged(DateRange range)
+    {
+        selectedDate = range.Start;
+        var topManagementLoadingTask =  LoadTopManagementInfoForSelectedDate();
+        var accountingInfoLoadingTask = LoadAccountingInfoForAccount();
+        await Task.WhenAll(accountingInfoLoadingTask, topManagementLoadingTask);
+    }
+
+    private async Task LoadTopManagementInfoForSelectedDate()
     {
         var parameters = new Dictionary<string, string>
                          {
-                             ["from"] = StartDate.Value.ToString("O"),
-                             ["to"] = EndDate.Value.AddDays(1).ToString("O")
+                             ["from"] = selectedDate.Value.ToString("O"),
+                             ["to"] = selectedDate.Value.AddDays(1).ToString("O")
                          };
-        var query = QueryHelpers.AddQueryString($"api/v1/accounting/{selectedAccountId}/period", parameters);
-        accountingInfoItems = await http.GetFromJsonAsync<AccountingInfoItem[]>(query);
+        var managementQuery = QueryHelpers.AddQueryString("api/v1/accounting/management/period", parameters);
+        var stringTopManagementEarned = await http.GetStringAsync(managementQuery);
+        if (decimal.TryParse(stringTopManagementEarned, NumberStyles.Any, CultureInfo.InvariantCulture, out var decimalTopManagementEarned))
+        {
+            topManagementEarned = decimalTopManagementEarned;
+        }
+    }
+
+    private async Task LoadAccountingInfoForAccount()
+    {
+        var parameters = new Dictionary<string, string>
+                         {
+                             ["from"] = selectedDate.Value.ToString("O"),
+                             ["to"] = selectedDate.Value.AddDays(1).ToString("O")
+                         };
+        
+        var auditQuery = QueryHelpers.AddQueryString($"api/v1/accounting/{selectedAccountId}/period", parameters);
+        accountingInfoItems = await http.GetFromJsonAsync<AccountingInfoItem[]>(auditQuery);
     }
 }
