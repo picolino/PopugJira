@@ -29,7 +29,7 @@
                       FirstDayOfWeek="DayOfWeek.Monday"
                       Inline="false"
                       OnRangeSelect="@(OnMostCostlyGoalSelectedDateRangeChanged)"/>
-    <label>Most costly goal: @mostCostlyGoalTitle</label>
+    <label>Most costly goal: @mostCostlyGoalTitle - @mostCostlyGoalPrice.ToString("C2")</label>
 </div>
 
 @inject IHttpClientFactory httpClientFactory;
@@ -42,6 +42,7 @@
     private DateTimeOffset? mostCostlyGoalSelectedDateFrom = DateTime.Today.AddDays(-1);
     private DateTimeOffset? mostCostlyGoalSelectedDateTo = DateTime.Today;
     private string mostCostlyGoalTitle;
+    private decimal mostCostlyGoalPrice;
 
     protected override async Task OnInitializedAsync()
     {
@@ -82,5 +83,6 @@
         var mostCostlyGoalQuery = QueryHelpers.AddQueryString("api/v1/analytics/goals/costly", parameters);
         var mostCostlyGoalResult = await http.GetFromJsonAsync<GoalCost>(mostCostlyGoalQuery);
         mostCostlyGoalTitle = mostCostlyGoalResult?.Title;
+        mostCostlyGoalPrice = mostCostlyGoalResult?.Cost ?? 0;
     }
 }
