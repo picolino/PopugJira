@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="linq2db.AspNet" Version="3.2.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\PopugJira.Shared\PopugJira.Microservice\PopugJira.Microservice.csproj" />
+      <ProjectReference Include="..\PopugJira.Notifications.Application\PopugJira.Notifications.Application.csproj" />
+      <ProjectReference Include="..\PopugJira.Notifications.DataAccessLayer\PopugJira.Notifications.DataAccessLayer.csproj" />
+    </ItemGroup>
+
+</Project>
