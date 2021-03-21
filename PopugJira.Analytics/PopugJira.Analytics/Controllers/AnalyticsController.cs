@@ -1,11 +1,13 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PopugJira.Analytics.Application.Queries;
 using PopugJira.Analytics.Domain;
 
 namespace PopugJira.Analytics.Controllers
 {
+    [Authorize(Roles = "admin")]
     [ApiController]
     [Route("api/v1/analytics")]
     public class AnalyticsController : ControllerBase
