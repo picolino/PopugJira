@@ -15,7 +15,7 @@ namespace PopugJira.Analytics.Application.Queries
             this.topManagementEarnedEntryGetDbOperations = topManagementEarnedEntryGetDbOperations;
         }
         
-        public async Task<TopManagementEarnedEntry[]> Query(DateTime date)
+        public async Task<TopManagementEarnedEntry> Query(DateTime date)
         {
             return await topManagementEarnedEntryGetDbOperations.GetByDate(date);
         }

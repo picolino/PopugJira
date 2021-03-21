@@ -20,7 +20,7 @@ namespace PopugJira.Analytics.DataAccessLayer
             var entity = await GoalCosts.Where(o => o.CompleteDateTime.Between(from, to))
                                         .OrderByDescending(o => o.Cost)
                                         .FirstOrDefaultAsync();
-            return entity.ToDomain();
+            return entity?.ToDomain();
         }
     }
 }

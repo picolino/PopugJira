@@ -2,6 +2,7 @@ using FluentMigrator;
 
 namespace PopugJira.Analytics.DataAccessLayer.Migrations
 {
+    [Migration(1)]
     public class AddGoalCosts : AutoReversingMigration
     {
         public override void Up()

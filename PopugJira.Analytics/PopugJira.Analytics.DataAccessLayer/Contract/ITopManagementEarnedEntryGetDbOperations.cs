@@ -6,6 +6,6 @@ namespace PopugJira.Analytics.DataAccessLayer.Contract
 {
     public interface ITopManagementEarnedEntryGetDbOperations
     {
-        Task<TopManagementEarnedEntry[]> GetByDate(DateTime date);
+        Task<TopManagementEarnedEntry> GetByDate(DateTime date);
     }
 }

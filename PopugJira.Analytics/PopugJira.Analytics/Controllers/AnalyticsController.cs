@@ -20,8 +20,8 @@ namespace PopugJira.Analytics.Controllers
             this.mostCostlyGoalForPeriodQuery = mostCostlyGoalForPeriodQuery;
         }
         
-        [HttpGet("earned/management/{date}")]
-        public async Task<TopManagementEarnedEntry[]> QueryTopManagementEarnedFor([FromRoute] DateTime date)
+        [HttpGet("earned/management")]
+        public async Task<TopManagementEarnedEntry> QueryTopManagementEarnedFor([FromQuery] DateTime date)
         {
             return await topManagementEarnedForDayQuery.Query(date);
         }

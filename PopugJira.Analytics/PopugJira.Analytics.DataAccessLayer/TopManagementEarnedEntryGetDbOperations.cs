@@ -15,11 +15,11 @@ namespace PopugJira.Analytics.DataAccessLayer
         {
         }
 
-        public async Task<TopManagementEarnedEntry[]> GetByDate(DateTime date)
+        public async Task<TopManagementEarnedEntry> GetByDate(DateTime date)
         {
-            var entities = await TopManagementEarnedEntryEntities.Where(o => o.Date == date.Date)
-                                                                 .ToArrayAsync();
-            return entities.Select(o => o.ToDomain()).ToArray();
+            var entity = await TopManagementEarnedEntryEntities.Where(o => o.Date == date.Date)
+                                                                 .FirstOrDefaultAsync();
+            return entity?.ToDomain();
         }
     }
 }
