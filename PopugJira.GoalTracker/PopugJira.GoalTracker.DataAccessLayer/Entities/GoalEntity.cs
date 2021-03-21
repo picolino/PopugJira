@@ -18,6 +18,12 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Entities
         [Column("description")]
         public string Description { get; init; }
         
+        [Column("assign_price")]
+        public decimal AssignPrice { get; init; }
+        
+        [Column("complete_price")]
+        public decimal CompletePrice { get; init; }
+        
         [Column("state")]
         public GoalState State { get; init; }
         
@@ -29,7 +35,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Entities
 
         public Goal ToDomain()
         {
-            return new (Id, Title, Description, State, Assignee?.ToDomain());
+            return new (Id, Title, Description, AssignPrice, CompletePrice, State, Assignee?.ToDomain());
         }
     }
 }

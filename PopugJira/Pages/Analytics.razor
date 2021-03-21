@@ -80,7 +80,7 @@
         var parameters = new Dictionary<string, string>
                          {
                              ["from"] = mostCostlyGoalSelectedDateFrom.Value.ToString("O"),
-                             ["to"] = mostCostlyGoalSelectedDateTo.Value.ToString("O")
+                             ["to"] = mostCostlyGoalSelectedDateTo.Value.AddDays(1).ToString("O")
                          };
         var mostCostlyGoalQuery = QueryHelpers.AddQueryString("api/v1/analytics/goals/costly", parameters);
         var mostCostlyGoalResult = await http.GetFromJsonAsync<GoalCost>(mostCostlyGoalQuery);

@@ -39,22 +39,24 @@ namespace PopugJira.GoalTracker.Application.Commands
 
         public async Task Execute()
         {
-            var incompleteGoalIds = await goalsGetDbOperations.GetIdsByState(GoalState.Incomplete);
             var assigneesIds = await assigneesGetDbOperations.GetAllIds();
 
             if (assigneesIds.Any())
             {
-                foreach (var goalId in incompleteGoalIds)
+                var incompleteGoalIds = await goalsGetDbOperations.GetIdsByState(GoalState.Incomplete);
+                var incompleteGoals = await goalsGetDbOperations.Get(incompleteGoalIds);
+                
+                foreach (var goal in incompleteGoals)
                 {
                     var selectedAssigneeId = assigneesIds[random.Next(0, assigneesIds.Length)];
-                    await goalsWriteDbOperations.SetAssignee(goalId, selectedAssigneeId);
+                    await goalsWriteDbOperations.SetAssignee(goal.Id, selectedAssigneeId);
                     var assignUtcDateTime = dateTimeService.UtcNow;
-                    var assignPrice = await goalsConfigGetDbOperations.GetAssignGoalPrice();
+
                     await messageBus.Publish(new GoalAssignedEventV1
                                              {
-                                                 Id = goalId,
+                                                 Id = goal.Id,
                                                  AssigneeId = selectedAssigneeId,
-                                                 AssignPrice = assignPrice,
+                                                 AssignPrice = goal.AssignPrice,
                                                  AssignDateTime = assignUtcDateTime
                                              });
                 }

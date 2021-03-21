@@ -11,7 +11,7 @@ namespace PopugJira.Analytics.DataAccessLayer.Migrations
                   .WithColumn("id").AsString().PrimaryKey()
                   .WithColumn("title").AsString().NotNullable()
                   .WithColumn("cost").AsDecimal().NotNullable()
-                  .WithColumn("complete_datetime").AsDateTime2();
+                  .WithColumn("complete_datetime").AsDateTime2().Nullable();
         }
     }
 }

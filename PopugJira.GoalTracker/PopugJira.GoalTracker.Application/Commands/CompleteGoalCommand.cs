@@ -35,12 +35,11 @@ namespace PopugJira.GoalTracker.Application.Commands
             await goalsWriteDbOperations.SetState(GoalState.Complete, id);
             var completeUtcDateTime = dateTimeService.UtcNow;
             var goal = await goalsGetDbOperations.Get(id);
-            var goalCompletePrice = await goalsConfigGetDbOperations.GetCompleteGoalPrice();
             await messageBus.Publish(new GoalCompletedEventV1
                                      {
                                          Id = id,
                                          AssigneeId = goal.Assignee.Id,
-                                         CompletePrice = goalCompletePrice,
+                                         CompletePrice = goal.CompletePrice,
                                          CompleteDateTime = completeUtcDateTime
                                      });
         }

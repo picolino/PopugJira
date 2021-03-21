@@ -8,12 +8,16 @@ namespace PopugJira.GoalTracker.Domain
         public Goal(string id,
                     string title,
                     string description, 
+                    decimal assignPrice,
+                    decimal completePrice,
                     GoalState state, 
                     Assignee assignee = null)
         {
             Id = id;
             Title = title;
             Description = description;
+            AssignPrice = assignPrice;
+            CompletePrice = completePrice;
             State = state;
             Assignee = assignee;
         }
@@ -21,6 +25,8 @@ namespace PopugJira.GoalTracker.Domain
         public string Id { get; }
         public string Title { get; }
         public string Description { get; }
+        public decimal AssignPrice { get; }
+        public decimal CompletePrice { get; }
         public GoalState State { get; }
         public Assignee Assignee { get; }
     }
