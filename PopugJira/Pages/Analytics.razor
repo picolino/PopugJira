@@ -15,7 +15,7 @@
                       FirstDayOfWeek="DayOfWeek.Monday"
                       Inline="false"
                       OnRangeSelect="@(OnTopManagementEarnedSelectedDateChanged)"/>
-    <label>Earned: @topManagementEarned</label>
+    <label>Earned: @topManagementEarned.ToString("C2")</label>
 </div>
 
 <h4>Most costly goal</h4>
@@ -65,14 +65,11 @@
     {
         var parameters = new Dictionary<string, string>
                          {
-                             ["date"] = topManagementEarnedSelectedDate.Value.ToString("O")
+                             ["date"] = topManagementEarnedSelectedDate.Value.Date.ToString("O")
                          };
         var managementQuery = QueryHelpers.AddQueryString("api/v1/analytics/earned/management", parameters);
         var topManagementEarnedEntry = await http.GetFromJsonAsync<TopManagementEarnedEntry>(managementQuery);
-        if (topManagementEarnedEntry is not null)
-        {
-            topManagementEarned = topManagementEarnedEntry.Earned;
-        }
+        topManagementEarned = topManagementEarnedEntry?.Earned ?? 0;
     }
     
     private async Task LoadMostCostlyGoal()
@@ -84,9 +81,6 @@
                          };
         var mostCostlyGoalQuery = QueryHelpers.AddQueryString("api/v1/analytics/goals/costly", parameters);
         var mostCostlyGoalResult = await http.GetFromJsonAsync<GoalCost>(mostCostlyGoalQuery);
-        if (mostCostlyGoalResult is not null)
-        {
-            mostCostlyGoalTitle = mostCostlyGoalResult.Title;
-        }
+        mostCostlyGoalTitle = mostCostlyGoalResult?.Title;
     }
 }

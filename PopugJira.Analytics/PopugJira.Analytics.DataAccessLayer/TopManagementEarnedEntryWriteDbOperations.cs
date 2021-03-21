@@ -21,7 +21,7 @@ namespace PopugJira.Analytics.DataAccessLayer
                 .InsertOrUpdateAsync(() => new TopManagementEarnedEntryEntity
                                            {
                                                Id = Guid.NewGuid().ToString(),
-                                               Date = date,
+                                               Date = date.Date,
                                                Earned = addEarnedAmount,
                                                NegativeEmployeesBalanceCount = 1
                                            },

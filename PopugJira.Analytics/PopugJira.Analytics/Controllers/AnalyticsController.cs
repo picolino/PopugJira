@@ -23,7 +23,7 @@ namespace PopugJira.Analytics.Controllers
         [HttpGet("earned/management")]
         public async Task<TopManagementEarnedEntry> QueryTopManagementEarnedFor([FromQuery] DateTime date)
         {
-            return await topManagementEarnedForDayQuery.Query(date);
+            return await topManagementEarnedForDayQuery.Query(DateTime.SpecifyKind(date, DateTimeKind.Utc));
         }
 
         [HttpGet("goals/costly")]
