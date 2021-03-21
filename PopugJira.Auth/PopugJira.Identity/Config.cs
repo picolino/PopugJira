@@ -32,7 +32,8 @@ namespace PopugJira.Identity
                    {
                        new ApiScope("goal-tracker"),
                        new ApiScope("accounting"),
-                       new ApiScope("analytics")
+                       new ApiScope("analytics"),
+                       new ApiScope("notifications"),
                    };
         }
 
@@ -54,6 +55,11 @@ namespace PopugJira.Identity
                        {
                            Scopes = { "analytics" },
                            UserClaims = { ClaimTypes.Role }
+                       },
+                       new ApiResource("notifications", "Notifications API")
+                       {
+                           Scopes = { "notifications" },
+                           UserClaims = { ClaimTypes.Role }
                        }
                    };
         }
@@ -67,7 +73,7 @@ namespace PopugJira.Identity
                            ClientId = "blazor-client",
                            AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                            AlwaysIncludeUserClaimsInIdToken = true,
-                           AllowedScopes = { "openid", "goal-tracker", "accounting", "analytics", "user-info" },
+                           AllowedScopes = { "openid", "user-info", "goal-tracker", "accounting", "analytics", "notifications" },
                            ClientSecrets =
                            {
                                new Secret("SECRET".Sha512())
