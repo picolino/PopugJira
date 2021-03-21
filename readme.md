@@ -1,5 +1,9 @@
 # PopugJira
 
+_PopugJira - is a task tracker with additional accounting and analytics utilities_
+
+_Created as education project, showing my capabilities in building asynchronous microservice architecture_
+
 ## Microservices
 ### PopugJira.Identity
 IdentityServer4 with ASP.NET Identity authorization service.
