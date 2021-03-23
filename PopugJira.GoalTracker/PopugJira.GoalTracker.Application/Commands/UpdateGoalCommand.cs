@@ -22,12 +22,15 @@ namespace PopugJira.GoalTracker.Application.Commands
         public async Task Execute(GoalUpdateDto goalUpdateDto)
         {
             await goalsWriteDbOperations.Update(goalUpdateDto.Id, goalUpdateDto.Title, goalUpdateDto.Description);
-            
+
             await messageBus.Publish(new GoalUpdatedEventV1
                                      {
                                          Id = goalUpdateDto.Id,
-                                         Title = goalUpdateDto.Title,
-                                         Description = goalUpdateDto.Description
+                                         GoalPart = new GoalUpdatedEventV1GoalPart
+                                                    {
+                                                        Title = goalUpdateDto.Title,
+                                                        Description = goalUpdateDto.Description
+                                                    }
                                      });
         }
     }

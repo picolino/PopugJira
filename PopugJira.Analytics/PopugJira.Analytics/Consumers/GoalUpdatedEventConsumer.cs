@@ -18,7 +18,14 @@ namespace PopugJira.Analytics.Consumers
         
         public async Task ConsumeAsync(GoalUpdatedEventV1 message, CancellationToken cancellationToken = new CancellationToken())
         {
-            await updateGoalCostCommand.Execute(message.Id, message.Title);
+            if (message.GoalPart is not null)
+            {
+                
+            }
+            if (message.PricePart is not null)
+            {
+                await updateGoalCostCommand.Execute(message.Id, message.PricePart.Title);
+            }
         }
     }
 }
