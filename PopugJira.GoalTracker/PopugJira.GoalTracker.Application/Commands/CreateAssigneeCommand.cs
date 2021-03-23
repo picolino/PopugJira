@@ -17,7 +17,7 @@ namespace PopugJira.GoalTracker.Application.Commands
         
         public async Task Execute(AssigneeCreateDto assigneeCreateDto)
         {
-            var assignee = new Assignee(null, assigneeCreateDto.UserId, assigneeCreateDto.UserName);
+            var assignee = new Assignee(assigneeCreateDto.Id, assigneeCreateDto.Name);
             await assigneeWriteDbOperations.Create(assignee);
         }
     }

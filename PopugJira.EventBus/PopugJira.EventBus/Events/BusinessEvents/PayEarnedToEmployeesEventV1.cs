@@ -2,7 +2,7 @@
 
 namespace PopugJira.EventBus.Events.BusinessEvents
 {
-    public class PayEarnedToEmployeesEvent
+    public class PayEarnedToEmployeesEventV1
     {
         public string AccountId { get; set; }
         public decimal Earned { get; set; }

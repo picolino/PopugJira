@@ -53,8 +53,6 @@ namespace PopugJira.Microservice
                                                          options.RequireHttpsMetadata = false;
                                                          options.RoleClaimType = ClaimTypes.Role;
                                                      });
-
-            RegisterServices(services);
             
             services.AddFluentMigratorCore()
                     .ConfigureRunner(rb =>
@@ -63,14 +61,18 @@ namespace PopugJira.Microservice
                                          rb.ScanIn(domainAssemblies).For.Migrations();
                                      })
                     .AddLogging(lb => lb.AddFluentMigratorConsole());
-            
-            var rabbitMessageBus = new RabbitMqMessageBus(RabbitHutch.CreateBus(Configuration.GetConnectionString("RabbitMQ")));
+
+            var bus = RabbitHutch.CreateBus(Configuration.GetConnectionString("RabbitMQ"),
+                                            svc => svc.EnableMessageVersioning());
+            var rabbitMessageBus = new RabbitMqMessageBus(bus);
             services.AddSingleton<IMessageBus>(rabbitMessageBus);
             services.AddSingleton<RabbitScopedMessageDispatcher>();
             services.AddSingleton(p => new AutoSubscriber(rabbitMessageBus.Bus, MicroserviceName)
                                        {
                                            AutoSubscriberMessageDispatcher = new RabbitScopedMessageDispatcher(p)
                                        });
+
+            RegisterServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

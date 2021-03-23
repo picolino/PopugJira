@@ -8,6 +8,7 @@ using Blazored.Modal;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Http;
@@ -23,13 +24,17 @@ namespace PopugJira
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
-
-            await ConfigureServices(builder, builder.Services);
-
+            
+            await ConfigureServices(builder.Configuration, builder.Services);
+            
+            var provider = builder.Services.BuildServiceProvider();
+            
+            await Configure(builder, provider);
+            
             await builder.Build().RunAsync();
         }
 
-        private static async Task ConfigureServices(WebAssemblyHostBuilder builder, IServiceCollection services)
+        private static Task ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
             services.AddBlazoredModal();
             services.AddBlazoredLocalStorage();
@@ -38,16 +43,30 @@ namespace PopugJira
             services.TryAddScoped<AuthenticationStateProvider, OAuthAuthenticationStateProvider>();
             services.TryAddScoped<AuthService>();
             services.TryAddTransient<AuthorizationFailedHandler>();
+            
+            services.ConfigureHttpClient("goal_tracker", configuration["BaseUrls:GoalTracker"]);
+            services.ConfigureHttpClient("accounting", configuration["BaseUrls:Accounting"]);
 
-            var provider = services.BuildServiceProvider();
+            return Task.CompletedTask;
+        }
 
-            var httpClientBuilder = services.AddHttpClient("goal_tracker",
-                                                           client => { client.BaseAddress = new Uri(builder.Configuration["BaseUrls:GoalTracker"]); })
-                                            .AddHttpMessageHandler<AuthorizationFailedHandler>();
+        private static Task Configure(WebAssemblyHostBuilder builder, IServiceProvider provider)
+        {
+            return Task.CompletedTask;
+        }
+    }
 
-            services.Configure<HttpClientFactoryOptions>(httpClientBuilder.Name,
+    public static class ServiceProviderExtensions
+    {
+        public static void ConfigureHttpClient(this IServiceCollection services, string httpClientName, string apiBaseUrl)
+        {
+            var builder = services.AddHttpClient(httpClientName, client => { client.BaseAddress = new Uri(apiBaseUrl); })
+                                  .AddHttpMessageHandler<AuthorizationFailedHandler>();
+            
+            services.Configure<HttpClientFactoryOptions>(builder.Name,
                                                          options =>
                                                          {
+                                                             var provider = services.BuildServiceProvider();
                                                              options.SuppressHandlerScope = true;
                                                              options.HttpClientActions.Add(client =>
                                                                                            {

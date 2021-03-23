@@ -1,6 +1,6 @@
-﻿namespace PopugJira.EventBus.Events.UserCud
+namespace PopugJira.Domain
 {
-    public class UserUpdatedEvent
+    public record Account
     {
         public string Id { get; set; }
         public string Name { get; set; }

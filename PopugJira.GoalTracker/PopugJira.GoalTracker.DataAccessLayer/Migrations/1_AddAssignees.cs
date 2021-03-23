@@ -9,8 +9,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Migrations
         {
             Create.Table("assignees")
                   .WithColumn("id").AsString().PrimaryKey()
-                  .WithColumn("user_id").AsString().NotNullable()
-                  .WithColumn("user_name").AsString().NotNullable();
+                  .WithColumn("name").AsString().NotNullable();
             
             Alter.Table("goals")
                  .AddColumn("assignee_id").AsString().Nullable().ForeignKey("assignees", "id");

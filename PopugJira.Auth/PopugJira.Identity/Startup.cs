@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -67,30 +68,6 @@ namespace PopugJira.Identity
 
             var rabbitMessageBus = new RabbitMqMessageBus(RabbitHutch.CreateBus(Configuration.GetConnectionString("RabbitMQ")));
             services.AddSingleton<IMessageBus>(rabbitMessageBus);
-
-            CreateRoles(services).Wait();
-        }
-
-        private static async Task CreateRoles(IServiceCollection serviceCollection)
-        {
-            await using var sp = serviceCollection.BuildServiceProvider();
-            var roleManager = sp.GetService<RoleManager<IdentityRole>>();
-                                   
-            var roles = new[]
-                        {
-                            "admin",
-                            "programmer",
-                            "bookkeeper",
-                            "manager"
-                        };
-
-            foreach (var roleName in roles)
-            {
-                if (roleManager != null && !await roleManager.RoleExistsAsync(roleName))
-                {
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
-                }
-            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,6 +87,33 @@ namespace PopugJira.Identity
                              {
                                  endpoints.MapDefaultControllerRoute();
                              });
+            
+            CreateRoles(app.ApplicationServices).Wait();
+        }
+        
+        private static async Task CreateRoles(IServiceProvider sp)
+        {
+            using var scope = sp.CreateScope();
+            var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+            await dbContext.Database.MigrateAsync();
+            
+            var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+                                   
+            var roles = new[]
+                        {
+                            "admin",
+                            "programmer",
+                            "bookkeeper",
+                            "manager"
+                        };
+
+            foreach (var roleName in roles)
+            {
+                if (roleManager != null && !await roleManager.RoleExistsAsync(roleName))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
         }
     }
 }

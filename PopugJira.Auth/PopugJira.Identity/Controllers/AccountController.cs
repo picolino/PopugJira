@@ -40,7 +40,7 @@ namespace PopugJira.Identity.Controllers
                                                                  });
                 if (result.Succeeded && roleAdd.Succeeded && claimsAdd.Succeeded)
                 {
-                    await messageBus.Publish(new UserCreatedEvent
+                    await messageBus.Publish(new UserCreatedEventV1
                                              {
                                                  Id = user.Id,
                                                  Name = user.UserName,

@@ -20,8 +20,7 @@ namespace PopugJira.GoalTracker.DataAccessLayer
             await Assignees.InsertAsync(() => new AssigneeEntity
                                               {
                                                   Id = assignee.Id ?? Guid.NewGuid().ToString(),
-                                                  UserId = assignee.UserId,
-                                                  UserName = assignee.UserName
+                                                  Name = assignee.UserName
                                               });
         }
     }
