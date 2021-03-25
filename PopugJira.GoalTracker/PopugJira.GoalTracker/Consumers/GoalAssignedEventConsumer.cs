@@ -1,11 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using EasyNetQ.AutoSubscribe;
+using PopugJira.EventBus;
 using PopugJira.EventBus.Events.BusinessEvents;
-using PopugJira.Notifications.Application.Commands;
+using PopugJira.GoalTracker.Application.Commands;
 using Serviced;
 
-namespace PopugJira.Notifications.Consumers
+namespace PopugJira.GoalTracker.Consumers
 {
     public class GoalAssignedEventConsumer : IConsumeAsync<GoalAssignedEventV1>, IScoped
     {

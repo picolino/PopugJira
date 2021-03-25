@@ -1,11 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using EasyNetQ.AutoSubscribe;
+using PopugJira.Accounting.Application.Commands;
 using PopugJira.EventBus.Events.BusinessEvents;
-using PopugJira.Notifications.Application.Commands;
 using Serviced;
 
-namespace PopugJira.Notifications.Consumers
+namespace PopugJira.Accounting.Consumers
 {
     public class PayEarnedToEmployeesEventConsumer : IConsumeAsync<PayEarnedToEmployeesEventV1>, IScoped
     {
