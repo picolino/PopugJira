@@ -15,7 +15,6 @@ namespace PopugJira.GoalTracker.Application.Commands
         private readonly IGoalsGetDbOperations goalsGetDbOperations;
         private readonly IGoalsWriteDbOperations goalsWriteDbOperations;
         private readonly IAssigneesGetDbOperations assigneesGetDbOperations;
-        private readonly IGoalsConfigGetDbOperations goalsConfigGetDbOperations;
         private readonly IDateTimeService dateTimeService;
         private readonly IMessageBus messageBus;
         private readonly Random random;
@@ -23,14 +22,12 @@ namespace PopugJira.GoalTracker.Application.Commands
         public AssignOpenedGoalsRandomlyCommand(IGoalsGetDbOperations goalsGetDbOperations,
                                                 IGoalsWriteDbOperations goalsWriteDbOperations,
                                                 IAssigneesGetDbOperations assigneesGetDbOperations,
-                                                IGoalsConfigGetDbOperations goalsConfigGetDbOperations,
                                                 IDateTimeService dateTimeService,
                                                 IMessageBus messageBus)
         {
             this.goalsGetDbOperations = goalsGetDbOperations;
             this.goalsWriteDbOperations = goalsWriteDbOperations;
             this.assigneesGetDbOperations = assigneesGetDbOperations;
-            this.goalsConfigGetDbOperations = goalsConfigGetDbOperations;
             this.dateTimeService = dateTimeService;
             this.messageBus = messageBus;
 
@@ -56,7 +53,6 @@ namespace PopugJira.GoalTracker.Application.Commands
                                              {
                                                  Id = goal.Id,
                                                  AssigneeId = selectedAssigneeId,
-                                                 AssignPrice = goal.AssignPrice,
                                                  AssignDateTime = assignUtcDateTime
                                              });
                 }

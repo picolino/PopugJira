@@ -22,8 +22,7 @@ namespace PopugJira.Analytics.Consumers
             await createGoalCostCommand.Execute(new CreateGoalCostDto
                                                 {
                                                     Id = message.Id,
-                                                    Title = message.Title,
-                                                    Cost = message.CompletePrice
+                                                    Title = message.Title
                                                 });
         }
     }

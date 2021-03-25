@@ -4,7 +4,7 @@ namespace PopugJira.Analytics.Domain
 {
     public class GoalCost
     {
-        public GoalCost(string id, string title, decimal cost, DateTime? completedDateTime)
+        public GoalCost(string id, string title, decimal? cost, DateTime? completedDateTime)
         {
             Id = id;
             Title = title;
@@ -14,7 +14,7 @@ namespace PopugJira.Analytics.Domain
         
         public string Id { get; }
         public string Title { get; }
-        public decimal Cost { get; }
+        public decimal? Cost { get; }
         public DateTime? CompletedDateTime { get; }
     }
 }

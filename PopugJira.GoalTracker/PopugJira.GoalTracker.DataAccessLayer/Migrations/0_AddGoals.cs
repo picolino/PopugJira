@@ -11,8 +11,6 @@ namespace PopugJira.GoalTracker.DataAccessLayer.Migrations
                   .WithColumn("id").AsString().PrimaryKey()
                   .WithColumn("title").AsString().NotNullable().Indexed()
                   .WithColumn("description").AsString().Nullable()
-                  .WithColumn("assign_price").AsDecimal().NotNullable()
-                  .WithColumn("complete_price").AsDecimal().NotNullable()
                   .WithColumn("state").AsInt32().NotNullable().Indexed();
         }
     }

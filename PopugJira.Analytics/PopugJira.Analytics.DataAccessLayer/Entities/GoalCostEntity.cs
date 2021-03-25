@@ -14,7 +14,7 @@ namespace PopugJira.Analytics.DataAccessLayer.Entities
         public string Title { get; set; }
         
         [Column("cost")]
-        public decimal Cost { get; set; }
+        public decimal? Cost { get; set; }
         
         [Column("complete_datetime")]
         public DateTime? CompleteDateTime { get; set; }

@@ -10,21 +10,25 @@ namespace PopugJira.Analytics.Consumers
     public class GoalUpdatedEventConsumer : IConsumeAsync<GoalUpdatedEventV1>, IScoped
     {
         private readonly UpdateGoalCostCommand updateGoalCostCommand;
+        private readonly SetCostForGoalCommand setCostForGoalCommand;
 
-        public GoalUpdatedEventConsumer(UpdateGoalCostCommand updateGoalCostCommand)
+        public GoalUpdatedEventConsumer(UpdateGoalCostCommand updateGoalCostCommand,
+                                        SetCostForGoalCommand setCostForGoalCommand)
         {
             this.updateGoalCostCommand = updateGoalCostCommand;
+            this.setCostForGoalCommand = setCostForGoalCommand;
         }
         
         public async Task ConsumeAsync(GoalUpdatedEventV1 message, CancellationToken cancellationToken = new CancellationToken())
         {
             if (message.GoalPart is not null)
             {
-                
+                await updateGoalCostCommand.Execute(message.Id, message.GoalPart.Title);
             }
-            if (message.PricePart is not null)
+            
+            if (message.EstimatePart is not null)
             {
-                await updateGoalCostCommand.Execute(message.Id, message.PricePart.Title);
+                await setCostForGoalCommand.Execute(message.Id, message.EstimatePart.CompletePrice);
             }
         }
     }

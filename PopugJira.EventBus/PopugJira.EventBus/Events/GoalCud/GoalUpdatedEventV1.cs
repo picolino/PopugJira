@@ -4,7 +4,7 @@
     {
         public string Id { get; set; }
         public GoalUpdatedEventV1GoalPart GoalPart { get; set; }
-        public GoalUpdatedEventV1PricePart PricePart { get; set; }
+        public GoalUpdatedEventV1PricePart EstimatePart { get; set; }
     }
 
     public class GoalUpdatedEventV1GoalPart
@@ -15,7 +15,7 @@
     
     public class GoalUpdatedEventV1PricePart
     {
-        public decimal AssigneePrice { get; set; }
+        public decimal AssignPrice { get; set; }
         public decimal CompletePrice { get; set; }
     }
 }

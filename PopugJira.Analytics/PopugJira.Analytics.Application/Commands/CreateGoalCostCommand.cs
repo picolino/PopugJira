@@ -17,7 +17,7 @@ namespace PopugJira.Analytics.Application.Commands
         
         public async Task Execute(CreateGoalCostDto createGoalCostDto)
         {
-            var newGoalCost = new GoalCost(createGoalCostDto.Id, createGoalCostDto.Title, createGoalCostDto.Cost, null);
+            var newGoalCost = new GoalCost(createGoalCostDto.Id, createGoalCostDto.Title, null, null);
             await goalCostWriteDbOperations.Create(newGoalCost);
         }
     }

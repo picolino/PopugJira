@@ -40,5 +40,12 @@ namespace PopugJira.Analytics.DataAccessLayer
                            .Set(o => o.Title, title)
                            .UpdateAsync();
         }
+
+        public async Task SetCost(string goalId, decimal cost)
+        {
+            await GoalCosts.Where(o => o.Id == goalId)
+                           .Set(o => o.Cost, cost)
+                           .UpdateAsync();
+        }
     }
 }

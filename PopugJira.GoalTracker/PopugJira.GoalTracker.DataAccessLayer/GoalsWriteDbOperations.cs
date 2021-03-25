@@ -25,8 +25,6 @@ namespace PopugJira.GoalTracker.DataAccessLayer
                                               Id = goal.Id ?? Guid.NewGuid().ToString(),
                                               Title = goal.Title,
                                               Description = goal.Description,
-                                              AssignPrice = goal.AssignPrice,
-                                              CompletePrice = goal.CompletePrice,
                                               State = goal.State
                                           });
         }

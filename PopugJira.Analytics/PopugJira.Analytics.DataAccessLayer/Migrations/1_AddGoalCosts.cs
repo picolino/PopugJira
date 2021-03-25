@@ -10,7 +10,7 @@ namespace PopugJira.Analytics.DataAccessLayer.Migrations
             Create.Table("goal_costs")
                   .WithColumn("id").AsString().PrimaryKey()
                   .WithColumn("title").AsString().NotNullable()
-                  .WithColumn("cost").AsDecimal().NotNullable()
+                  .WithColumn("cost").AsDecimal().Nullable()
                   .WithColumn("complete_datetime").AsDateTime2().Nullable();
         }
     }

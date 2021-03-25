@@ -13,19 +13,16 @@ namespace PopugJira.GoalTracker.Application.Commands
     {
         private readonly IGoalsWriteDbOperations goalsWriteDbOperations;
         private readonly IGoalsGetDbOperations goalsGetDbOperations;
-        private readonly IGoalsConfigGetDbOperations goalsConfigGetDbOperations;
         private readonly IDateTimeService dateTimeService;
         private readonly IMessageBus messageBus;
 
         public CompleteGoalCommand(IGoalsWriteDbOperations goalsWriteDbOperations,
                                    IGoalsGetDbOperations goalsGetDbOperations,
-                                   IGoalsConfigGetDbOperations goalsConfigGetDbOperations,
                                    IDateTimeService dateTimeService,
                                    IMessageBus messageBus)
         {
             this.goalsWriteDbOperations = goalsWriteDbOperations;
             this.goalsGetDbOperations = goalsGetDbOperations;
-            this.goalsConfigGetDbOperations = goalsConfigGetDbOperations;
             this.dateTimeService = dateTimeService;
             this.messageBus = messageBus;
         }
@@ -39,7 +36,6 @@ namespace PopugJira.GoalTracker.Application.Commands
                                      {
                                          Id = id,
                                          AssigneeId = goal.Assignee.Id,
-                                         CompletePrice = goal.CompletePrice,
                                          CompleteDateTime = completeUtcDateTime
                                      });
         }
