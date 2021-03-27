@@ -8,6 +8,7 @@ using EasyNetQ.AutoSubscribe;
 using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -39,7 +40,16 @@ namespace PopugJira.Microservice
             var domainAssemblies = LoadAllDomainAssemblies().ToArray();
             services.AddServiced(domainAssemblies);
             
-            services.AddControllers();
+            services.AddControllers(options =>
+                                    {
+                                        var noContentFormatter = options.OutputFormatters
+                                                                        .OfType<HttpNoContentOutputFormatter>()
+                                                                        .FirstOrDefault();
+                                        if (noContentFormatter != null)
+                                        {
+                                            noContentFormatter.TreatNullValueAsNoContent = false;
+                                        }
+                                    });
 
             var swaggerOptions = new SwaggerOptions();
             ConfigureSwagger(swaggerOptions);

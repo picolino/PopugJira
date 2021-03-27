@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace PopugJira.GoalTracker.DataAccessLayer.Contract
+namespace PopugJira.Accounting.DataAccessLayer.Contract
 {
     public interface IGoalsConfigGetDbOperations
     {

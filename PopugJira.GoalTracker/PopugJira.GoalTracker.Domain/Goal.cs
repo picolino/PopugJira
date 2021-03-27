@@ -7,7 +7,7 @@ namespace PopugJira.GoalTracker.Domain
     {
         public Goal(string id,
                     string title,
-                    string description, 
+                    string description,
                     GoalState state, 
                     Assignee assignee = null)
         {

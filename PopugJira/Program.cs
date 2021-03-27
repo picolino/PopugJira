@@ -46,6 +46,7 @@ namespace PopugJira
             
             services.ConfigureHttpClient("goal_tracker", configuration["BaseUrls:GoalTracker"]);
             services.ConfigureHttpClient("accounting", configuration["BaseUrls:Accounting"]);
+            services.ConfigureHttpClient("analytics", configuration["BaseUrls:Analytics"]);
 
             return Task.CompletedTask;
         }

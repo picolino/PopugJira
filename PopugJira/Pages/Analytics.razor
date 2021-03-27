@@ -1,0 +1,88 @@
+@using BlazorDateRangePicker
+@using System.Globalization
+@using Microsoft.AspNetCore.WebUtilities
+@using PopugJira.Domain
+@page "/analytics"
+<h3>Analytics</h3>
+
+<h4>Top management</h4>
+<div>
+    <DateRangePicker @bind-StartDate="@topManagementEarnedSelectedDate"
+                      ShowOnlyOneCalendar="true"
+                      AutoApply="true"
+                      SingleDatePicker="true"
+                      Culture="CultureInfo.InvariantCulture"
+                      FirstDayOfWeek="DayOfWeek.Monday"
+                      Inline="false"
+                      OnRangeSelect="@(OnTopManagementEarnedSelectedDateChanged)"/>
+    <label>Earned: @topManagementEarned.ToString("C2")</label>
+</div>
+
+<h4>Most costly goal</h4>
+<div>
+    
+    <DateRangePicker @bind-StartDate="@mostCostlyGoalSelectedDateFrom"
+                      @bind-EndDate="@mostCostlyGoalSelectedDateTo"
+                      ShowOnlyOneCalendar="true"
+                      AutoApply="true"
+                      Culture="CultureInfo.InvariantCulture"
+                      FirstDayOfWeek="DayOfWeek.Monday"
+                      Inline="false"
+                      OnRangeSelect="@(OnMostCostlyGoalSelectedDateRangeChanged)"/>
+    <label>Most costly goal: @mostCostlyGoalTitle - @mostCostlyGoalPrice.ToString("C2")</label>
+</div>
+
+@inject IHttpClientFactory httpClientFactory;
+@code {
+    private HttpClient http;
+    
+    private DateTimeOffset? topManagementEarnedSelectedDate = DateTime.Today;
+    private decimal topManagementEarned;
+
+    private DateTimeOffset? mostCostlyGoalSelectedDateFrom = DateTime.Today.AddDays(-1);
+    private DateTimeOffset? mostCostlyGoalSelectedDateTo = DateTime.Today;
+    private string mostCostlyGoalTitle;
+    private decimal mostCostlyGoalPrice;
+
+    protected override async Task OnInitializedAsync()
+    {
+        http = httpClientFactory.CreateClient("analytics");
+        var topManagementEarnedTask = LoadTopManagementEarned();
+        var mostCostlyGoalTask = LoadMostCostlyGoal();
+        await Task.WhenAll(topManagementEarnedTask, mostCostlyGoalTask);
+    }
+
+    private async Task OnTopManagementEarnedSelectedDateChanged()
+    {
+        await LoadTopManagementEarned();
+    }
+
+    private async Task OnMostCostlyGoalSelectedDateRangeChanged()
+    {
+        await LoadMostCostlyGoal();
+    }
+
+    private async Task LoadTopManagementEarned()
+    {
+        var parameters = new Dictionary<string, string>
+                         {
+                             ["date"] = topManagementEarnedSelectedDate.Value.Date.ToString("O")
+                         };
+        var managementQuery = QueryHelpers.AddQueryString("api/v1/analytics/earned/management", parameters);
+        var topManagementEarnedEntry = await http.GetFromJsonAsync<TopManagementEarnedEntry>(managementQuery);
+        topManagementEarned = topManagementEarnedEntry?.Earned ?? 0;
+    }
+    
+    private async Task LoadMostCostlyGoal()
+    {
+        var parameters = new Dictionary<string, string>
+                         {
+                             ["from"] = mostCostlyGoalSelectedDateFrom.Value.ToString("O"),
+                             ["to"] = mostCostlyGoalSelectedDateTo.Value.AddDays(1).ToString("O")
+                         };
+        var mostCostlyGoalQuery = QueryHelpers.AddQueryString("api/v1/analytics/goals/costly", parameters);
+        var mostCostlyGoalResult = await http.GetFromJsonAsync<GoalCost>(mostCostlyGoalQuery);
+        mostCostlyGoalTitle = mostCostlyGoalResult?.Title;
+        mostCostlyGoalPrice = mostCostlyGoalResult?.Cost ?? 0;
+    }
+}

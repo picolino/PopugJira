@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using PopugJira.GoalTracker.DataAccessLayer.Contract;
+using PopugJira.Accounting.DataAccessLayer.Contract;
 using Serviced;
 
-namespace PopugJira.GoalTracker.Configuration
+namespace PopugJira.Accounting.Configuration
 {
     public class GoalsConfig : IGoalsConfigGetDbOperations, IScoped<IGoalsConfigGetDbOperations>
     {

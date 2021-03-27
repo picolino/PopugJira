@@ -6,7 +6,6 @@ namespace PopugJira.EventBus.Events.BusinessEvents
     {
         public string Id { get; set; }
         public string AssigneeId { get; set; }
-        public decimal AssignPrice { get; set; }
         public DateTime AssignDateTime { get; set; }
     }
 }

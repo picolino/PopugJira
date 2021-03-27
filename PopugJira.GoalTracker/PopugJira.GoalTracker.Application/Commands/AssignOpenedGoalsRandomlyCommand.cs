@@ -15,7 +15,6 @@ namespace PopugJira.GoalTracker.Application.Commands
         private readonly IGoalsGetDbOperations goalsGetDbOperations;
         private readonly IGoalsWriteDbOperations goalsWriteDbOperations;
         private readonly IAssigneesGetDbOperations assigneesGetDbOperations;
-        private readonly IGoalsConfigGetDbOperations goalsConfigGetDbOperations;
         private readonly IDateTimeService dateTimeService;
         private readonly IMessageBus messageBus;
         private readonly Random random;
@@ -23,14 +22,12 @@ namespace PopugJira.GoalTracker.Application.Commands
         public AssignOpenedGoalsRandomlyCommand(IGoalsGetDbOperations goalsGetDbOperations,
                                                 IGoalsWriteDbOperations goalsWriteDbOperations,
                                                 IAssigneesGetDbOperations assigneesGetDbOperations,
-                                                IGoalsConfigGetDbOperations goalsConfigGetDbOperations,
                                                 IDateTimeService dateTimeService,
                                                 IMessageBus messageBus)
         {
             this.goalsGetDbOperations = goalsGetDbOperations;
             this.goalsWriteDbOperations = goalsWriteDbOperations;
             this.assigneesGetDbOperations = assigneesGetDbOperations;
-            this.goalsConfigGetDbOperations = goalsConfigGetDbOperations;
             this.dateTimeService = dateTimeService;
             this.messageBus = messageBus;
 
@@ -39,22 +36,23 @@ namespace PopugJira.GoalTracker.Application.Commands
 
         public async Task Execute()
         {
-            var incompleteGoalIds = await goalsGetDbOperations.GetIdsByState(GoalState.Incomplete);
             var assigneesIds = await assigneesGetDbOperations.GetAllIds();
 
             if (assigneesIds.Any())
             {
-                foreach (var goalId in incompleteGoalIds)
+                var incompleteGoalIds = await goalsGetDbOperations.GetIdsByState(GoalState.Incomplete);
+                var incompleteGoals = await goalsGetDbOperations.Get(incompleteGoalIds);
+                
+                foreach (var goal in incompleteGoals)
                 {
                     var selectedAssigneeId = assigneesIds[random.Next(0, assigneesIds.Length)];
-                    await goalsWriteDbOperations.SetAssignee(goalId, selectedAssigneeId);
+                    await goalsWriteDbOperations.SetAssignee(goal.Id, selectedAssigneeId);
                     var assignUtcDateTime = dateTimeService.UtcNow;
-                    var assignPrice = await goalsConfigGetDbOperations.GetAssignGoalPrice();
+
                     await messageBus.Publish(new GoalAssignedEventV1
                                              {
-                                                 Id = goalId,
+                                                 Id = goal.Id,
                                                  AssigneeId = selectedAssigneeId,
-                                                 AssignPrice = assignPrice,
                                                  AssignDateTime = assignUtcDateTime
                                              });
                 }
