@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using LinqToDB;
 using LinqToDB.Configuration;
-using PopugJira.Notifications.DataAccessLayer.Contrcat;
+using PopugJira.Notifications.DataAccessLayer.Contract;
 using PopugJira.Notifications.DataAccessLayer.Entities;
 using PopugJira.Notifications.Domain;
 using Serviced;
