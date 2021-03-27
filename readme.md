@@ -5,7 +5,8 @@
 
 _PopugJira - is a task tracker with additional accounting and analytics utilities_
 
-_Created as education project, showing my capabilities in building asynchronous microservice architecture_
+_Created as education project, showing my capabilities in building asynchronous microservice architecture  
+If you want to see project evolution please go to [closed pull requests](https://github.com/picolino/PopugJira/pulls?q=is%3Apr+is%3Aclosed)_
 
 _Many thanks to authors of the [course about asynchronous architecture](https://education.borshev.com/architecture): @f213, @davydovanton_
 
