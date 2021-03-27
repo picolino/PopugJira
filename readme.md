@@ -1,4 +1,7 @@
-# PopugJira
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/17460456/112715971-ac5ef200-8ef4-11eb-97d0-0c0ce6ce02b2.png">
+</p>
+
 
 _PopugJira - is a task tracker with additional accounting and analytics utilities_
 
