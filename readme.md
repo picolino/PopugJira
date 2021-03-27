@@ -9,6 +9,9 @@ _Created as education project, showing my capabilities in building asynchronous 
 
 _Many thanks to authors of the [course about asynchronous architecture](https://education.borshev.com/architecture): @f213, @davydovanton_
 
+## Architecture diagram
+![image](https://user-images.githubusercontent.com/17460456/112715488-7d934c80-8ef1-11eb-9710-e4cef5e8913e.png)
+
 ## Microservices
 ### PopugJira.Identity
 IdentityServer4 with ASP.NET Identity authorization service.
