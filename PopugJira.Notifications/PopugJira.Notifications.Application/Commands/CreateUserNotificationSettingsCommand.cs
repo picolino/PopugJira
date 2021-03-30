@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using PopugJira.Notifications.Application.Dtos;
-using PopugJira.Notifications.DataAccessLayer.Contrcat;
+using PopugJira.Notifications.DataAccessLayer.Contract;
 using PopugJira.Notifications.Domain;
 using Serviced;
 

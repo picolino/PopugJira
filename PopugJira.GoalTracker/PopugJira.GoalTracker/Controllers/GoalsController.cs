@@ -21,7 +21,6 @@ namespace PopugJira.GoalTracker.Controllers
         private readonly CreateGoalCommand createGoalCommand;
         private readonly UpdateGoalCommand updateGoalCommand;
         private readonly DeleteGoalCommand deleteGoalCommand;
-        private readonly ReopenGoalCommand reopenGoalCommand;
         private readonly CompleteGoalCommand completeGoalCommand;
 
         public GoalsController(AllGoalsQuery allGoalsQuery,
@@ -30,7 +29,6 @@ namespace PopugJira.GoalTracker.Controllers
                                CreateGoalCommand createGoalCommand,
                                UpdateGoalCommand updateGoalCommand,
                                DeleteGoalCommand deleteGoalCommand,
-                               ReopenGoalCommand reopenGoalCommand,
                                CompleteGoalCommand completeGoalCommand)
         {
             this.allGoalsQuery = allGoalsQuery;
@@ -39,7 +37,6 @@ namespace PopugJira.GoalTracker.Controllers
             this.createGoalCommand = createGoalCommand;
             this.updateGoalCommand = updateGoalCommand;
             this.deleteGoalCommand = deleteGoalCommand;
-            this.reopenGoalCommand = reopenGoalCommand;
             this.completeGoalCommand = completeGoalCommand;
         }
 
@@ -87,13 +84,6 @@ namespace PopugJira.GoalTracker.Controllers
         public async Task Delete([FromRoute] string id)
         {
             await deleteGoalCommand.Execute(id);
-        }
-
-        [HttpPost]
-        [Route("workflow/{id}/reopen")]
-        public async Task Reopen([FromRoute] string id)
-        {
-            await reopenGoalCommand.Execute(id);
         }
 
         [HttpPost]
